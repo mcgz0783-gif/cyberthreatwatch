@@ -17,6 +17,7 @@ import { Route as BooksRouteImport } from './routes/books'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as InsightsSlugRouteImport } from './routes/insights.$slug'
 import { Route as BooksIdRouteImport } from './routes/books.$id'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 
@@ -60,6 +61,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const InsightsSlugRoute = InsightsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => InsightsRoute,
+} as any)
 const BooksIdRoute = BooksIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -77,11 +83,12 @@ export interface FileRoutesByFullPath {
   '/blog': typeof BlogRouteWithChildren
   '/books': typeof BooksRouteWithChildren
   '/contact': typeof ContactRoute
-  '/insights': typeof InsightsRoute
+  '/insights': typeof InsightsRouteWithChildren
   '/news': typeof NewsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/books/$id': typeof BooksIdRoute
+  '/insights/$slug': typeof InsightsSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -89,11 +96,12 @@ export interface FileRoutesByTo {
   '/blog': typeof BlogRouteWithChildren
   '/books': typeof BooksRouteWithChildren
   '/contact': typeof ContactRoute
-  '/insights': typeof InsightsRoute
+  '/insights': typeof InsightsRouteWithChildren
   '/news': typeof NewsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/books/$id': typeof BooksIdRoute
+  '/insights/$slug': typeof InsightsSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -102,11 +110,12 @@ export interface FileRoutesById {
   '/blog': typeof BlogRouteWithChildren
   '/books': typeof BooksRouteWithChildren
   '/contact': typeof ContactRoute
-  '/insights': typeof InsightsRoute
+  '/insights': typeof InsightsRouteWithChildren
   '/news': typeof NewsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/books/$id': typeof BooksIdRoute
+  '/insights/$slug': typeof InsightsSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -121,6 +130,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/blog/$slug'
     | '/books/$id'
+    | '/insights/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -133,6 +143,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/blog/$slug'
     | '/books/$id'
+    | '/insights/$slug'
   id:
     | '__root__'
     | '/'
@@ -145,6 +156,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/blog/$slug'
     | '/books/$id'
+    | '/insights/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -153,7 +165,7 @@ export interface RootRouteChildren {
   BlogRoute: typeof BlogRouteWithChildren
   BooksRoute: typeof BooksRouteWithChildren
   ContactRoute: typeof ContactRoute
-  InsightsRoute: typeof InsightsRoute
+  InsightsRoute: typeof InsightsRouteWithChildren
   NewsRoute: typeof NewsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
 }
@@ -216,6 +228,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/insights/$slug': {
+      id: '/insights/$slug'
+      path: '/$slug'
+      fullPath: '/insights/$slug'
+      preLoaderRoute: typeof InsightsSlugRouteImport
+      parentRoute: typeof InsightsRoute
+    }
     '/books/$id': {
       id: '/books/$id'
       path: '/$id'
@@ -253,13 +272,25 @@ const BooksRouteChildren: BooksRouteChildren = {
 
 const BooksRouteWithChildren = BooksRoute._addFileChildren(BooksRouteChildren)
 
+interface InsightsRouteChildren {
+  InsightsSlugRoute: typeof InsightsSlugRoute
+}
+
+const InsightsRouteChildren: InsightsRouteChildren = {
+  InsightsSlugRoute: InsightsSlugRoute,
+}
+
+const InsightsRouteWithChildren = InsightsRoute._addFileChildren(
+  InsightsRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   BlogRoute: BlogRouteWithChildren,
   BooksRoute: BooksRouteWithChildren,
   ContactRoute: ContactRoute,
-  InsightsRoute: InsightsRoute,
+  InsightsRoute: InsightsRouteWithChildren,
   NewsRoute: NewsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
 }
