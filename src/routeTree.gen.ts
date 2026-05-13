@@ -13,6 +13,7 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as NewsRouteImport } from './routes/news'
 import { Route as InsightsRouteImport } from './routes/insights'
+import { Route as FaqRouteImport } from './routes/faq'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as BooksRouteImport } from './routes/books'
 import { Route as BlogRouteImport } from './routes/blog'
@@ -40,6 +41,11 @@ const NewsRoute = NewsRouteImport.update({
 const InsightsRoute = InsightsRouteImport.update({
   id: '/insights',
   path: '/insights',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -89,6 +95,7 @@ export interface FileRoutesByFullPath {
   '/blog': typeof BlogRouteWithChildren
   '/books': typeof BooksRouteWithChildren
   '/contact': typeof ContactRoute
+  '/faq': typeof FaqRoute
   '/insights': typeof InsightsRouteWithChildren
   '/news': typeof NewsRoute
   '/privacy': typeof PrivacyRoute
@@ -103,6 +110,7 @@ export interface FileRoutesByTo {
   '/blog': typeof BlogRouteWithChildren
   '/books': typeof BooksRouteWithChildren
   '/contact': typeof ContactRoute
+  '/faq': typeof FaqRoute
   '/insights': typeof InsightsRouteWithChildren
   '/news': typeof NewsRoute
   '/privacy': typeof PrivacyRoute
@@ -118,6 +126,7 @@ export interface FileRoutesById {
   '/blog': typeof BlogRouteWithChildren
   '/books': typeof BooksRouteWithChildren
   '/contact': typeof ContactRoute
+  '/faq': typeof FaqRoute
   '/insights': typeof InsightsRouteWithChildren
   '/news': typeof NewsRoute
   '/privacy': typeof PrivacyRoute
@@ -134,6 +143,7 @@ export interface FileRouteTypes {
     | '/blog'
     | '/books'
     | '/contact'
+    | '/faq'
     | '/insights'
     | '/news'
     | '/privacy'
@@ -148,6 +158,7 @@ export interface FileRouteTypes {
     | '/blog'
     | '/books'
     | '/contact'
+    | '/faq'
     | '/insights'
     | '/news'
     | '/privacy'
@@ -162,6 +173,7 @@ export interface FileRouteTypes {
     | '/blog'
     | '/books'
     | '/contact'
+    | '/faq'
     | '/insights'
     | '/news'
     | '/privacy'
@@ -177,6 +189,7 @@ export interface RootRouteChildren {
   BlogRoute: typeof BlogRouteWithChildren
   BooksRoute: typeof BooksRouteWithChildren
   ContactRoute: typeof ContactRoute
+  FaqRoute: typeof FaqRoute
   InsightsRoute: typeof InsightsRouteWithChildren
   NewsRoute: typeof NewsRoute
   PrivacyRoute: typeof PrivacyRoute
@@ -211,6 +224,13 @@ declare module '@tanstack/react-router' {
       path: '/insights'
       fullPath: '/insights'
       preLoaderRoute: typeof InsightsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -310,6 +330,7 @@ const rootRouteChildren: RootRouteChildren = {
   BlogRoute: BlogRouteWithChildren,
   BooksRoute: BooksRouteWithChildren,
   ContactRoute: ContactRoute,
+  FaqRoute: FaqRoute,
   InsightsRoute: InsightsRouteWithChildren,
   NewsRoute: NewsRoute,
   PrivacyRoute: PrivacyRoute,
