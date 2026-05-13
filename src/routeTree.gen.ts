@@ -17,6 +17,7 @@ import { Route as BooksRouteImport } from './routes/books'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BooksIdRouteImport } from './routes/books.$id'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
@@ -58,37 +59,45 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BooksIdRoute = BooksIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => BooksRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/blog': typeof BlogRoute
-  '/books': typeof BooksRoute
+  '/books': typeof BooksRouteWithChildren
   '/contact': typeof ContactRoute
   '/insights': typeof InsightsRoute
   '/news': typeof NewsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/books/$id': typeof BooksIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/blog': typeof BlogRoute
-  '/books': typeof BooksRoute
+  '/books': typeof BooksRouteWithChildren
   '/contact': typeof ContactRoute
   '/insights': typeof InsightsRoute
   '/news': typeof NewsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/books/$id': typeof BooksIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/blog': typeof BlogRoute
-  '/books': typeof BooksRoute
+  '/books': typeof BooksRouteWithChildren
   '/contact': typeof ContactRoute
   '/insights': typeof InsightsRoute
   '/news': typeof NewsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/books/$id': typeof BooksIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -101,6 +110,7 @@ export interface FileRouteTypes {
     | '/insights'
     | '/news'
     | '/sitemap.xml'
+    | '/books/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -111,6 +121,7 @@ export interface FileRouteTypes {
     | '/insights'
     | '/news'
     | '/sitemap.xml'
+    | '/books/$id'
   id:
     | '__root__'
     | '/'
@@ -121,13 +132,14 @@ export interface FileRouteTypes {
     | '/insights'
     | '/news'
     | '/sitemap.xml'
+    | '/books/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   BlogRoute: typeof BlogRoute
-  BooksRoute: typeof BooksRoute
+  BooksRoute: typeof BooksRouteWithChildren
   ContactRoute: typeof ContactRoute
   InsightsRoute: typeof InsightsRoute
   NewsRoute: typeof NewsRoute
@@ -192,14 +204,31 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/books/$id': {
+      id: '/books/$id'
+      path: '/$id'
+      fullPath: '/books/$id'
+      preLoaderRoute: typeof BooksIdRouteImport
+      parentRoute: typeof BooksRoute
+    }
   }
 }
+
+interface BooksRouteChildren {
+  BooksIdRoute: typeof BooksIdRoute
+}
+
+const BooksRouteChildren: BooksRouteChildren = {
+  BooksIdRoute: BooksIdRoute,
+}
+
+const BooksRouteWithChildren = BooksRoute._addFileChildren(BooksRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   BlogRoute: BlogRoute,
-  BooksRoute: BooksRoute,
+  BooksRoute: BooksRouteWithChildren,
   ContactRoute: ContactRoute,
   InsightsRoute: InsightsRoute,
   NewsRoute: NewsRoute,
@@ -208,3 +237,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
