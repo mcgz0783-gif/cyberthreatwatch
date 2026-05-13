@@ -10,17 +10,27 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as NewsRouteImport } from './routes/news'
 import { Route as InsightsRouteImport } from './routes/insights'
+import { Route as FaqRouteImport } from './routes/faq'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as BooksRouteImport } from './routes/books'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as InsightsSlugRouteImport } from './routes/insights.$slug'
+import { Route as BooksIdRouteImport } from './routes/books.$id'
+import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NewsRoute = NewsRouteImport.update({
@@ -31,6 +41,11 @@ const NewsRoute = NewsRouteImport.update({
 const InsightsRoute = InsightsRouteImport.update({
   id: '/insights',
   path: '/insights',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -58,37 +73,67 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const InsightsSlugRoute = InsightsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => InsightsRoute,
+} as any)
+const BooksIdRoute = BooksIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => BooksRoute,
+} as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => BlogRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/blog': typeof BlogRoute
-  '/books': typeof BooksRoute
+  '/blog': typeof BlogRouteWithChildren
+  '/books': typeof BooksRouteWithChildren
   '/contact': typeof ContactRoute
-  '/insights': typeof InsightsRoute
+  '/faq': typeof FaqRoute
+  '/insights': typeof InsightsRouteWithChildren
   '/news': typeof NewsRoute
+  '/privacy': typeof PrivacyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/blog/$slug': typeof BlogSlugRoute
+  '/books/$id': typeof BooksIdRoute
+  '/insights/$slug': typeof InsightsSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/blog': typeof BlogRoute
-  '/books': typeof BooksRoute
+  '/blog': typeof BlogRouteWithChildren
+  '/books': typeof BooksRouteWithChildren
   '/contact': typeof ContactRoute
-  '/insights': typeof InsightsRoute
+  '/faq': typeof FaqRoute
+  '/insights': typeof InsightsRouteWithChildren
   '/news': typeof NewsRoute
+  '/privacy': typeof PrivacyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/blog/$slug': typeof BlogSlugRoute
+  '/books/$id': typeof BooksIdRoute
+  '/insights/$slug': typeof InsightsSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/blog': typeof BlogRoute
-  '/books': typeof BooksRoute
+  '/blog': typeof BlogRouteWithChildren
+  '/books': typeof BooksRouteWithChildren
   '/contact': typeof ContactRoute
-  '/insights': typeof InsightsRoute
+  '/faq': typeof FaqRoute
+  '/insights': typeof InsightsRouteWithChildren
   '/news': typeof NewsRoute
+  '/privacy': typeof PrivacyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/blog/$slug': typeof BlogSlugRoute
+  '/books/$id': typeof BooksIdRoute
+  '/insights/$slug': typeof InsightsSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -98,9 +143,14 @@ export interface FileRouteTypes {
     | '/blog'
     | '/books'
     | '/contact'
+    | '/faq'
     | '/insights'
     | '/news'
+    | '/privacy'
     | '/sitemap.xml'
+    | '/blog/$slug'
+    | '/books/$id'
+    | '/insights/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -108,9 +158,14 @@ export interface FileRouteTypes {
     | '/blog'
     | '/books'
     | '/contact'
+    | '/faq'
     | '/insights'
     | '/news'
+    | '/privacy'
     | '/sitemap.xml'
+    | '/blog/$slug'
+    | '/books/$id'
+    | '/insights/$slug'
   id:
     | '__root__'
     | '/'
@@ -118,19 +173,26 @@ export interface FileRouteTypes {
     | '/blog'
     | '/books'
     | '/contact'
+    | '/faq'
     | '/insights'
     | '/news'
+    | '/privacy'
     | '/sitemap.xml'
+    | '/blog/$slug'
+    | '/books/$id'
+    | '/insights/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
-  BlogRoute: typeof BlogRoute
-  BooksRoute: typeof BooksRoute
+  BlogRoute: typeof BlogRouteWithChildren
+  BooksRoute: typeof BooksRouteWithChildren
   ContactRoute: typeof ContactRoute
-  InsightsRoute: typeof InsightsRoute
+  FaqRoute: typeof FaqRoute
+  InsightsRoute: typeof InsightsRouteWithChildren
   NewsRoute: typeof NewsRoute
+  PrivacyRoute: typeof PrivacyRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
 }
 
@@ -141,6 +203,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/news': {
@@ -155,6 +224,13 @@ declare module '@tanstack/react-router' {
       path: '/insights'
       fullPath: '/insights'
       preLoaderRoute: typeof InsightsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -192,17 +268,72 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/insights/$slug': {
+      id: '/insights/$slug'
+      path: '/$slug'
+      fullPath: '/insights/$slug'
+      preLoaderRoute: typeof InsightsSlugRouteImport
+      parentRoute: typeof InsightsRoute
+    }
+    '/books/$id': {
+      id: '/books/$id'
+      path: '/$id'
+      fullPath: '/books/$id'
+      preLoaderRoute: typeof BooksIdRouteImport
+      parentRoute: typeof BooksRoute
+    }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof BlogRoute
+    }
   }
 }
+
+interface BlogRouteChildren {
+  BlogSlugRoute: typeof BlogSlugRoute
+}
+
+const BlogRouteChildren: BlogRouteChildren = {
+  BlogSlugRoute: BlogSlugRoute,
+}
+
+const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
+
+interface BooksRouteChildren {
+  BooksIdRoute: typeof BooksIdRoute
+}
+
+const BooksRouteChildren: BooksRouteChildren = {
+  BooksIdRoute: BooksIdRoute,
+}
+
+const BooksRouteWithChildren = BooksRoute._addFileChildren(BooksRouteChildren)
+
+interface InsightsRouteChildren {
+  InsightsSlugRoute: typeof InsightsSlugRoute
+}
+
+const InsightsRouteChildren: InsightsRouteChildren = {
+  InsightsSlugRoute: InsightsSlugRoute,
+}
+
+const InsightsRouteWithChildren = InsightsRoute._addFileChildren(
+  InsightsRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
-  BlogRoute: BlogRoute,
-  BooksRoute: BooksRoute,
+  BlogRoute: BlogRouteWithChildren,
+  BooksRoute: BooksRouteWithChildren,
   ContactRoute: ContactRoute,
-  InsightsRoute: InsightsRoute,
+  FaqRoute: FaqRoute,
+  InsightsRoute: InsightsRouteWithChildren,
   NewsRoute: NewsRoute,
+  PrivacyRoute: PrivacyRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
 }
 export const routeTree = rootRouteImport

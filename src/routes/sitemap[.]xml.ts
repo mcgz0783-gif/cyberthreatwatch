@@ -1,13 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
+import { BLOGS, INSIGHTS, BOOKS } from "@/lib/cyber-data";
 
-const BASE_URL = "";
+const BASE_URL = "https://cyberthreatwatch.lovable.app";
 
-interface SitemapEntry {
-  path: string;
-  changefreq?: "weekly" | "daily" | "monthly";
-  priority?: string;
-}
+interface SitemapEntry { path: string; changefreq?: string; priority?: string }
 
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
@@ -18,9 +15,14 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/news", changefreq: "daily", priority: "0.9" },
           { path: "/insights", changefreq: "weekly", priority: "0.8" },
           { path: "/blog", changefreq: "weekly", priority: "0.8" },
-          { path: "/books", changefreq: "monthly", priority: "0.6" },
+          { path: "/books", changefreq: "monthly", priority: "0.7" },
           { path: "/about", changefreq: "monthly", priority: "0.5" },
           { path: "/contact", changefreq: "monthly", priority: "0.5" },
+          { path: "/faq", changefreq: "monthly", priority: "0.6" },
+          { path: "/privacy", changefreq: "yearly", priority: "0.3" },
+          ...BLOGS.map((b) => ({ path: `/blog/${b.slug}`, changefreq: "monthly", priority: "0.7" })),
+          ...INSIGHTS.map((i) => ({ path: `/insights/${i.slug}`, changefreq: "monthly", priority: "0.7" })),
+          ...BOOKS.map((b) => ({ path: `/books/${b.id}`, changefreq: "monthly", priority: "0.6" })),
         ];
 
         const urls = entries.map((e) =>

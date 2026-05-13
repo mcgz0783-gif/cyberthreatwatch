@@ -8,6 +8,7 @@ const NAV: Array<{ label: string; to: string }> = [
   { label: "Insights", to: "/insights" },
   { label: "Blog", to: "/blog" },
   { label: "Books", to: "/books" },
+  { label: "FAQ", to: "/faq" },
   { label: "About", to: "/about" },
   { label: "Contact", to: "/contact" },
 ];

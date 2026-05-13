@@ -1,8 +1,22 @@
 import { useState } from "react";
+import { addSubscriber } from "@/lib/subscribers";
 
 export function Newsletter() {
   const [email, setEmail] = useState("");
-  const [sent, setSent] = useState(false);
+  const [state, setState] = useState<"idle" | "ok" | "error">("idle");
+  const [msg, setMsg] = useState("");
+
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const r = addSubscriber(email);
+    if (r.ok) {
+      setState("ok");
+      setMsg("✓ SUBSCRIBED — WELCOME TO THE NETWORK");
+    } else {
+      setState("error");
+      setMsg(r.reason === "duplicate" ? "Already subscribed." : "Please enter a valid email.");
+    }
+  };
 
   return (
     <section className="relative overflow-hidden border-y border-border bg-surface">
@@ -12,32 +26,25 @@ export function Newsletter() {
         <h2 className="section-title mb-3">Stay in the Loop</h2>
         <p className="text-muted-foreground max-w-xl mx-auto mb-8">
           Real-time threat intelligence, curated news, and deep-dive analysis
-          delivered weekly to your inbox.
+          delivered to your inbox.
         </p>
-        {sent ? (
-          <div className="font-mono-cyber text-cyber-green text-sm tracking-widest">
-            ✓ SUBSCRIBED — WELCOME TO THE NETWORK
-          </div>
+        {state === "ok" ? (
+          <div className="font-mono-cyber text-cyber-green text-sm tracking-widest">{msg}</div>
         ) : (
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              if (email) setSent(true);
-            }}
-            className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto"
-          >
+          <form onSubmit={onSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
             <input
               type="email"
               required
               placeholder="agent@domain.com"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => { setEmail(e.target.value); setState("idle"); }}
               className="input-cyber"
             />
-            <button type="submit" className="btn-cyber">
-              Subscribe
-            </button>
+            <button type="submit" className="btn-cyber">Subscribe</button>
           </form>
+        )}
+        {state === "error" && (
+          <div className="mt-3 font-mono-cyber text-cyber-red text-xs">{msg}</div>
         )}
       </div>
     </section>
