@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as NewsRouteImport } from './routes/news'
 import { Route as InsightsRouteImport } from './routes/insights'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -24,6 +25,11 @@ import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NewsRoute = NewsRouteImport.update({
@@ -85,6 +91,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/insights': typeof InsightsRouteWithChildren
   '/news': typeof NewsRoute
+  '/privacy': typeof PrivacyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/books/$id': typeof BooksIdRoute
@@ -98,6 +105,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/insights': typeof InsightsRouteWithChildren
   '/news': typeof NewsRoute
+  '/privacy': typeof PrivacyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/books/$id': typeof BooksIdRoute
@@ -112,6 +120,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/insights': typeof InsightsRouteWithChildren
   '/news': typeof NewsRoute
+  '/privacy': typeof PrivacyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/books/$id': typeof BooksIdRoute
@@ -127,6 +136,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/insights'
     | '/news'
+    | '/privacy'
     | '/sitemap.xml'
     | '/blog/$slug'
     | '/books/$id'
@@ -140,6 +150,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/insights'
     | '/news'
+    | '/privacy'
     | '/sitemap.xml'
     | '/blog/$slug'
     | '/books/$id'
@@ -153,6 +164,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/insights'
     | '/news'
+    | '/privacy'
     | '/sitemap.xml'
     | '/blog/$slug'
     | '/books/$id'
@@ -167,6 +179,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   InsightsRoute: typeof InsightsRouteWithChildren
   NewsRoute: typeof NewsRoute
+  PrivacyRoute: typeof PrivacyRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
 }
 
@@ -177,6 +190,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/news': {
@@ -292,6 +312,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   InsightsRoute: InsightsRouteWithChildren,
   NewsRoute: NewsRoute,
+  PrivacyRoute: PrivacyRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
 }
 export const routeTree = rootRouteImport
