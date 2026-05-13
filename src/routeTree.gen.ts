@@ -18,6 +18,7 @@ import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BooksIdRouteImport } from './routes/books.$id'
+import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
@@ -64,39 +65,47 @@ const BooksIdRoute = BooksIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => BooksRoute,
 } as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => BlogRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/blog': typeof BlogRoute
+  '/blog': typeof BlogRouteWithChildren
   '/books': typeof BooksRouteWithChildren
   '/contact': typeof ContactRoute
   '/insights': typeof InsightsRoute
   '/news': typeof NewsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/books/$id': typeof BooksIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/blog': typeof BlogRoute
+  '/blog': typeof BlogRouteWithChildren
   '/books': typeof BooksRouteWithChildren
   '/contact': typeof ContactRoute
   '/insights': typeof InsightsRoute
   '/news': typeof NewsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/books/$id': typeof BooksIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/blog': typeof BlogRoute
+  '/blog': typeof BlogRouteWithChildren
   '/books': typeof BooksRouteWithChildren
   '/contact': typeof ContactRoute
   '/insights': typeof InsightsRoute
   '/news': typeof NewsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/books/$id': typeof BooksIdRoute
 }
 export interface FileRouteTypes {
@@ -110,6 +119,7 @@ export interface FileRouteTypes {
     | '/insights'
     | '/news'
     | '/sitemap.xml'
+    | '/blog/$slug'
     | '/books/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -121,6 +131,7 @@ export interface FileRouteTypes {
     | '/insights'
     | '/news'
     | '/sitemap.xml'
+    | '/blog/$slug'
     | '/books/$id'
   id:
     | '__root__'
@@ -132,13 +143,14 @@ export interface FileRouteTypes {
     | '/insights'
     | '/news'
     | '/sitemap.xml'
+    | '/blog/$slug'
     | '/books/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
-  BlogRoute: typeof BlogRoute
+  BlogRoute: typeof BlogRouteWithChildren
   BooksRoute: typeof BooksRouteWithChildren
   ContactRoute: typeof ContactRoute
   InsightsRoute: typeof InsightsRoute
@@ -211,8 +223,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BooksIdRouteImport
       parentRoute: typeof BooksRoute
     }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof BlogRoute
+    }
   }
 }
+
+interface BlogRouteChildren {
+  BlogSlugRoute: typeof BlogSlugRoute
+}
+
+const BlogRouteChildren: BlogRouteChildren = {
+  BlogSlugRoute: BlogSlugRoute,
+}
+
+const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
 
 interface BooksRouteChildren {
   BooksIdRoute: typeof BooksIdRoute
@@ -227,7 +256,7 @@ const BooksRouteWithChildren = BooksRoute._addFileChildren(BooksRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
-  BlogRoute: BlogRoute,
+  BlogRoute: BlogRouteWithChildren,
   BooksRoute: BooksRouteWithChildren,
   ContactRoute: ContactRoute,
   InsightsRoute: InsightsRoute,
@@ -237,3 +266,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
