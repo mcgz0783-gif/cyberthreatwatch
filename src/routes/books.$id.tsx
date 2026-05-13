@@ -66,7 +66,7 @@ function BookReader() {
       <div className="grid md:grid-cols-[220px_1fr] gap-8">
         <nav className="md:sticky md:top-24 md:self-start space-y-1">
           <div className="eyebrow mb-2">Chapters</div>
-          {book.chapters.map((c, i) => (
+          {book.chapters.map((c: { title: string; body: string }, i: number) => (
             <button
               key={i}
               onClick={() => setChapter(i)}
