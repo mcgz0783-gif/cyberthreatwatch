@@ -8,7 +8,7 @@ export const Route = createFileRoute("/blog/$slug")({
     if (!post) throw notFound();
     return { post };
   },
-  head: ({ loaderData }) => ({
+  head: ({ params, loaderData }) => ({
     meta: [
       { title: `${loaderData?.post.title} — CyberSec Blog` },
       { name: "description", content: loaderData?.post.summary },
@@ -16,7 +16,9 @@ export const Route = createFileRoute("/blog/$slug")({
       { property: "og:description", content: loaderData?.post.summary },
       { property: "og:image", content: loaderData?.post.cover },
       { property: "og:type", content: "article" },
+      { property: "og:url", content: `https://cyberthreatwatch.lovable.app/blog/${params.slug}` },
     ],
+    links: [{ rel: "canonical", href: `https://cyberthreatwatch.lovable.app/blog/${params.slug}` }],
   }),
   notFoundComponent: () => (
     <div className="max-w-3xl mx-auto px-4 py-24 text-center">

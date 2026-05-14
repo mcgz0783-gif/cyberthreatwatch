@@ -378,19 +378,130 @@ export const STATS = [
 
 // ── TOOLS — each links to a real, free cybersecurity platform ────────────────
 export interface ToolItem {
-  name: string; icon: string; desc: string; url: string; provider: string;
+  slug: string;
+  name: string;
+  icon: string;
+  desc: string;
+  url: string;
+  provider: string;
+  category: string;
+  about: string;
+  features: string[];
+  howTo: string[];
+  related?: string[];
 }
+
 export const TOOLS: ToolItem[] = [
-  { name: "Threat Map", icon: "🗺️", desc: "Live global cyberattack visualization", url: "https://cybermap.kaspersky.com/", provider: "Kaspersky" },
-  { name: "CVE Search", icon: "🔍", desc: "Search the latest vulnerabilities by CVE ID", url: "https://nvd.nist.gov/vuln/search", provider: "NIST NVD" },
-  { name: "Hash Checker", icon: "#️⃣", desc: "Verify file integrity and detect malware", url: "https://www.virustotal.com/gui/home/upload", provider: "VirusTotal" },
-  { name: "IP Reputation", icon: "🌐", desc: "Check IP addresses against threat feeds", url: "https://www.abuseipdb.com/", provider: "AbuseIPDB" },
-  { name: "SSL Inspector", icon: "🔐", desc: "Analyze SSL/TLS certificate security", url: "https://www.ssllabs.com/ssltest/", provider: "Qualys SSL Labs" },
-  { name: "News API", icon: "📡", desc: "Live cybersecurity feed aggregator", url: "https://thehackernews.com/", provider: "The Hacker News" },
-  { name: "Free VPN", icon: "🛡️", desc: "Open-source VPN for secure connections", url: "https://openvpn.net/community/", provider: "OpenVPN" },
-  { name: "Free Antivirus", icon: "🧬", desc: "Free malware protection and scanner", url: "https://www.kaspersky.com/free-antivirus", provider: "Kaspersky" },
-  { name: "Have I Been Pwned", icon: "📧", desc: "Check if your email was in a data breach", url: "https://haveibeenpwned.com/", provider: "HIBP" },
-  { name: "URL Scanner", icon: "🔗", desc: "Scan and analyze suspicious URLs in real time", url: "https://urlscan.io/", provider: "urlscan.io" },
-  { name: "Phishing Reporter", icon: "🎣", desc: "Report and investigate phishing campaigns", url: "https://phishtank.org/", provider: "PhishTank" },
-  { name: "MITRE ATT&CK", icon: "⚔️", desc: "Adversary tactics & techniques knowledge base", url: "https://attack.mitre.org/", provider: "MITRE" },
+  {
+    slug: "threat-map", name: "Threat Map", icon: "🗺️",
+    desc: "Live global cyberattack visualization",
+    url: "https://cybermap.kaspersky.com/", provider: "Kaspersky",
+    category: "Visualization",
+    about: "Kaspersky's interactive Cyberthreat Real-Time Map shows live malicious activity detected by Kaspersky's global sensor network. Use it to get a feel for the scale and geography of attacks happening right now.",
+    features: ["Live on-access scans", "On-demand & web AV detections", "Mail & IDS telemetry", "Country-level filtering"],
+    howTo: ["Open the platform link below.", "Spin the globe or pick a country to inspect telemetry.", "Toggle threat layers (OAS, ODS, MAV, WAV, IDS) to focus your view."],
+  },
+  {
+    slug: "cve-search", name: "CVE Search", icon: "🔍",
+    desc: "Search the latest vulnerabilities by CVE ID",
+    url: "https://nvd.nist.gov/vuln/search", provider: "NIST NVD",
+    category: "Vulnerability Intel",
+    about: "The U.S. National Vulnerability Database is the authoritative public source for CVE records, CVSS scoring, CPE mappings, and vendor advisories — the backbone of most vulnerability management workflows.",
+    features: ["Full-text CVE search", "CVSS v3.1 / v4 scoring", "Vendor & product filters", "JSON / CSV exports"],
+    howTo: ["Visit NVD via the link below.", "Search by CVE ID, keyword, vendor, or CPE.", "Pivot to references for vendor advisories and proof-of-concept analysis."],
+  },
+  {
+    slug: "hash-checker", name: "Hash Checker", icon: "#️⃣",
+    desc: "Verify file integrity and detect malware",
+    url: "https://www.virustotal.com/gui/home/upload", provider: "VirusTotal",
+    category: "Malware Analysis",
+    about: "VirusTotal aggregates 70+ antivirus engines and URL/domain blocklists. Submit a file or hash to get a multi-engine verdict plus behavioral, network, and YARA-style intelligence.",
+    features: ["70+ AV engines", "Sandbox behavior reports", "YARA & Sigma matching", "Community comments & graphs"],
+    howTo: ["Open VirusTotal via the link below.", "Upload a suspicious file or paste its SHA-256.", "Review engine verdicts, behavior tab, and community signals before acting."],
+  },
+  {
+    slug: "ip-reputation", name: "IP Reputation", icon: "🌐",
+    desc: "Check IP addresses against threat feeds",
+    url: "https://www.abuseipdb.com/", provider: "AbuseIPDB",
+    category: "Threat Intel",
+    about: "AbuseIPDB is a community-driven blocklist of abusive IP addresses. Use it to enrich SIEM alerts, harden firewalls, and triage suspicious authentication attempts.",
+    features: ["Confidence-of-abuse score", "Crowd-sourced reports", "REST API + bulk lookup", "WHOIS & geolocation"],
+    howTo: ["Open AbuseIPDB via the link below.", "Paste the IP under investigation.", "Use the API key (free tier) to wire reputation lookups into your SOAR."],
+  },
+  {
+    slug: "ssl-inspector", name: "SSL Inspector", icon: "🔐",
+    desc: "Analyze SSL/TLS certificate security",
+    url: "https://www.ssllabs.com/ssltest/", provider: "Qualys SSL Labs",
+    category: "Crypto & TLS",
+    about: "Qualys SSL Labs Server Test grades any public HTTPS endpoint on protocol support, cipher strength, certificate chain, and known vulnerabilities — the gold standard for TLS hygiene.",
+    features: ["A+ to F grade", "Protocol & cipher matrix", "Cert chain validation", "Known-vuln checks (BEAST, POODLE, etc.)"],
+    howTo: ["Open SSL Labs via the link below.", "Enter your domain (uncheck the public results box for private tests).", "Address every yellow/red item in the report."],
+  },
+  {
+    slug: "news-aggregator", name: "News API", icon: "📡",
+    desc: "Live cybersecurity feed aggregator",
+    url: "https://thehackernews.com/", provider: "The Hacker News",
+    category: "News",
+    about: "The Hacker News is one of the most-read independent cybersecurity outlets, covering breaking incidents, research releases, and vendor advisories within hours.",
+    features: ["Breaking incident coverage", "Vendor advisory roundups", "RSS feed", "Newsletter digest"],
+    howTo: ["Open The Hacker News via the link below.", "Subscribe to the RSS or daily newsletter.", "Cross-reference stories with primary sources before sharing internally."],
+  },
+  {
+    slug: "free-vpn", name: "Free VPN", icon: "🛡️",
+    desc: "Open-source VPN for secure connections",
+    url: "https://openvpn.net/community/", provider: "OpenVPN",
+    category: "Network Security",
+    about: "OpenVPN Community Edition is the long-standing open-source VPN reference implementation. Run your own server and clients for free, with full control over crypto and routing.",
+    features: ["Open-source server & client", "TLS 1.3 with strong ciphers", "Cross-platform clients", "Self-hostable"],
+    howTo: ["Visit the OpenVPN community page below.", "Download the server build for your distro / OS.", "Generate certs with EasyRSA, distribute .ovpn profiles to your clients."],
+  },
+  {
+    slug: "free-antivirus", name: "Free Antivirus", icon: "🧬",
+    desc: "Free malware protection and scanner",
+    url: "https://www.kaspersky.com/free-antivirus", provider: "Kaspersky",
+    category: "Endpoint Protection",
+    about: "Kaspersky Free delivers the company's core anti-malware engine — real-time on-access scanning and on-demand scans — at no cost for personal use.",
+    features: ["Real-time scanning", "Cloud-assisted detection", "Quarantine & rollback", "Lightweight footprint"],
+    howTo: ["Open the Kaspersky Free page via the link below.", "Download the installer for your OS.", "Run a full system scan after install, then enable scheduled scans."],
+  },
+  {
+    slug: "have-i-been-pwned", name: "Have I Been Pwned", icon: "📧",
+    desc: "Check if your email was in a data breach",
+    url: "https://haveibeenpwned.com/", provider: "HIBP",
+    category: "Identity",
+    about: "Troy Hunt's Have I Been Pwned aggregates billions of leaked credentials from public breaches, letting individuals and SOCs check exposure for emails, domains, and passwords.",
+    features: ["Email & domain search", "Password 'Pwned Passwords' API (k-anon)", "Breach notification subscriptions", "Free for personal use"],
+    howTo: ["Open HIBP via the link below.", "Enter the email or domain under investigation.", "For organizations, verify domain ownership to unlock full breach details."],
+  },
+  {
+    slug: "url-scanner", name: "URL Scanner", icon: "🔗",
+    desc: "Scan and analyze suspicious URLs in real time",
+    url: "https://urlscan.io/", provider: "urlscan.io",
+    category: "Web Threats",
+    about: "urlscan.io is a sandbox for the web — it visits a URL in an instrumented browser, captures DOM, requests, screenshots, and verdicts you can pivot through.",
+    features: ["Headless-browser scans", "Screenshots & DOM tree", "Per-request indicators", "Free public API"],
+    howTo: ["Open urlscan.io via the link below.", "Paste a suspicious URL and choose visibility (public/unlisted/private).", "Pivot through requested domains and indicators in the result graph."],
+  },
+  {
+    slug: "phishing-reporter", name: "Phishing Reporter", icon: "🎣",
+    desc: "Report and investigate phishing campaigns",
+    url: "https://phishtank.org/", provider: "PhishTank",
+    category: "Anti-Phishing",
+    about: "PhishTank is a free community clearinghouse for verified phishing URLs, used by browsers, email gateways, and threat-intel platforms worldwide.",
+    features: ["Submit & verify phish URLs", "Public verified feed", "Free API & data dumps", "Browser/email integrations"],
+    howTo: ["Open PhishTank via the link below.", "Submit suspected phishing URLs for community verification.", "Pull the verified phish feed into your gateway or SIEM."],
+  },
+  {
+    slug: "mitre-attack", name: "MITRE ATT&CK", icon: "⚔️",
+    desc: "Adversary tactics & techniques knowledge base",
+    url: "https://attack.mitre.org/", provider: "MITRE",
+    category: "Threat Intel",
+    about: "MITRE ATT&CK is the de-facto common language for describing adversary behavior — tactics, techniques, sub-techniques, and the groups & software that use them.",
+    features: ["Enterprise / Mobile / ICS matrices", "Group & software profiles", "Mitigations & detections", "STIX/TAXII data export"],
+    howTo: ["Open the ATT&CK matrix via the link below.", "Pick the platform (Enterprise/Mobile/ICS) that matches your environment.", "Map your detections to techniques and chase the gaps."],
+  },
 ];
+
+export function findTool(slug: string) {
+  return TOOLS.find((t) => t.slug === slug);
+}
