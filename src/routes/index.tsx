@@ -8,7 +8,9 @@ export const Route = createFileRoute("/")({
     meta: [
       { title: "CyberSec Updates — Real-Time Threat Intelligence" },
       { name: "description", content: "Live cyber threat feed, curated news, deep-dive insights, and a security knowledge base for defenders." },
+      { property: "og:url", content: "https://cyberthreatwatch.lovable.app/" },
     ],
+    links: [{ rel: "canonical", href: "https://cyberthreatwatch.lovable.app/" }],
   }),
   component: HomePage,
 });
