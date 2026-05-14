@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ToolsRouteImport } from './routes/tools'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as NewsRouteImport } from './routes/news'
@@ -23,6 +24,11 @@ import { Route as InsightsSlugRouteImport } from './routes/insights.$slug'
 import { Route as BooksIdRouteImport } from './routes/books.$id'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 
+const ToolsRoute = ToolsRouteImport.update({
+  id: '/tools',
+  path: '/tools',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
@@ -100,6 +106,7 @@ export interface FileRoutesByFullPath {
   '/news': typeof NewsRoute
   '/privacy': typeof PrivacyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/tools': typeof ToolsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/books/$id': typeof BooksIdRoute
   '/insights/$slug': typeof InsightsSlugRoute
@@ -115,6 +122,7 @@ export interface FileRoutesByTo {
   '/news': typeof NewsRoute
   '/privacy': typeof PrivacyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/tools': typeof ToolsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/books/$id': typeof BooksIdRoute
   '/insights/$slug': typeof InsightsSlugRoute
@@ -131,6 +139,7 @@ export interface FileRoutesById {
   '/news': typeof NewsRoute
   '/privacy': typeof PrivacyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/tools': typeof ToolsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/books/$id': typeof BooksIdRoute
   '/insights/$slug': typeof InsightsSlugRoute
@@ -148,6 +157,7 @@ export interface FileRouteTypes {
     | '/news'
     | '/privacy'
     | '/sitemap.xml'
+    | '/tools'
     | '/blog/$slug'
     | '/books/$id'
     | '/insights/$slug'
@@ -163,6 +173,7 @@ export interface FileRouteTypes {
     | '/news'
     | '/privacy'
     | '/sitemap.xml'
+    | '/tools'
     | '/blog/$slug'
     | '/books/$id'
     | '/insights/$slug'
@@ -178,6 +189,7 @@ export interface FileRouteTypes {
     | '/news'
     | '/privacy'
     | '/sitemap.xml'
+    | '/tools'
     | '/blog/$slug'
     | '/books/$id'
     | '/insights/$slug'
@@ -194,10 +206,18 @@ export interface RootRouteChildren {
   NewsRoute: typeof NewsRoute
   PrivacyRoute: typeof PrivacyRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  ToolsRoute: typeof ToolsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/tools': {
+      id: '/tools'
+      path: '/tools'
+      fullPath: '/tools'
+      preLoaderRoute: typeof ToolsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sitemap.xml': {
       id: '/sitemap.xml'
       path: '/sitemap.xml'
@@ -335,7 +355,18 @@ const rootRouteChildren: RootRouteChildren = {
   NewsRoute: NewsRoute,
   PrivacyRoute: PrivacyRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  ToolsRoute: ToolsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
