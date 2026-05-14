@@ -82,7 +82,7 @@ function ToolDetail() {
         <section className="card-cyber rounded p-6">
           <h2 className="font-display font-bold text-lg text-cyber-white mb-3">✨ Key Features</h2>
           <ul className="space-y-2 text-sm text-cyber-text">
-            {tool.features.map((f) => (
+            {tool.features.map((f: string) => (
               <li key={f} className="flex gap-2">
                 <span className="text-accent">▸</span>
                 <span>{f}</span>
