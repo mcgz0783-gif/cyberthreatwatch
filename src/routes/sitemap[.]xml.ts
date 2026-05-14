@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
-import { BLOGS, INSIGHTS, BOOKS } from "@/lib/cyber-data";
+import { BLOGS, INSIGHTS, BOOKS, TOOLS } from "@/lib/cyber-data";
 
 const BASE_URL = "https://cyberthreatwatch.lovable.app";
 
