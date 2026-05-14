@@ -93,7 +93,7 @@ function ToolDetail() {
         <section className="card-cyber rounded p-6">
           <h2 className="font-display font-bold text-lg text-cyber-white mb-3">🚀 How to Use</h2>
           <ol className="space-y-2 text-sm text-cyber-text list-decimal pl-5">
-            {tool.howTo.map((step) => (
+            {tool.howTo.map((step: string) => (
               <li key={step}>{step}</li>
             ))}
           </ol>
