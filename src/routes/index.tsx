@@ -84,14 +84,16 @@ function HomePage() {
 
       {/* TOOLS */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <SectionHeader eyebrow="Toolkit" title="Operator Tools" subtitle="Open intelligence and verification utilities — each links to a free, world-class platform." />
+        <div className="flex items-end justify-between flex-wrap gap-4 mb-10">
+          <SectionHeader eyebrow="Toolkit" title="Operator Tools" subtitle="Open intelligence and verification utilities — each links to a free, world-class platform." />
+          <Link to="/tools" className="btn-ghost-cyber !py-2 !px-4 !text-xs">All Tools →</Link>
+        </div>
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {TOOLS.map((t) => (
-            <a
-              key={t.name}
-              href={t.url}
-              target="_blank"
-              rel="noreferrer noopener"
+          {TOOLS.slice(0, 6).map((t) => (
+            <Link
+              key={t.slug}
+              to="/tools/$slug"
+              params={{ slug: t.slug }}
               className="card-cyber rounded p-6 flex items-start gap-4 hover:border-accent transition group"
             >
               <div className="w-12 h-12 rounded bg-accent/10 border border-accent/30 flex items-center justify-center text-2xl shrink-0 group-hover:bg-accent/20 transition">
@@ -102,9 +104,9 @@ function HomePage() {
                   {t.name}
                 </h3>
                 <p className="text-sm text-muted-foreground mt-1">{t.desc}</p>
-                <p className="text-[10px] font-mono-cyber text-accent mt-2">↗ {t.provider}</p>
+                <p className="text-[10px] font-mono-cyber text-accent mt-2">→ {t.provider}</p>
               </div>
-            </a>
+            </Link>
           ))}
         </div>
       </section>
