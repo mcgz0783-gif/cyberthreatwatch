@@ -225,135 +225,323 @@ export interface BookItem {
   pages: number;
   icon: string;
   cover: string;
-  chapters: { title: string; body: string }[];
+  chapters: { title: string; body: string; images?: string[] }[];
 }
 
-const baseChapter = (n: number, title: string, body: string) => ({ title: `Chapter ${n}: ${title}`, body });
+// Curated cybersecurity stock imagery pool (royalty-free, Unsplash)
+const IMG_POOL = [
+  "1550751827-4bd374c3f58b", // server room
+  "1563013544-824ae1b704d3", // code matrix
+  "1558494949-ef010cbdcc31", // cloud infra
+  "1518770660439-4636190af475", // circuit
+  "1551808525-051329d8bdfb", // terminal
+  "1614064641938-3bbee52942c7", // padlock
+  "1526374965328-7f61d4dc18c5", // dark laptop
+  "1510511459019-5dda7724fd87", // datacenter racks
+  "1555066931-4365d14bab8c", // code screen
+  "1551836022-d5d88e9218df", // hooded hacker
+  "1573164574572-cb89e39749b4", // blue cyber
+  "1677442136019-21780ecad995", // AI / neural
+  "1473341304170-971dccb5ac1e", // infrastructure grid
+  "1517433670267-08bbd4be890f", // network cables
+  "1544197150-b99a580bb7a8", // glowing server
+];
+const pickImgs = (seed: number, count = 2) =>
+  Array.from({ length: count }, (_, i) => UNSPLASH(IMG_POOL[(seed * 7 + i * 3) % IMG_POOL.length]));
+
+const ch = (
+  n: number,
+  title: string,
+  body: string,
+  imgSeed: number,
+  imgCount = 2,
+) => ({
+  title: `Chapter ${n}: ${title}`,
+  body,
+  images: pickImgs(imgSeed, imgCount),
+});
+
+const PARA = "\n\n";
 
 export const BOOKS: BookItem[] = [
   {
     id: 1, slug: "art-of-intrusion", title: "The Art of Intrusion", author: "Kevin Mitnick", year: 2023,
-    cat: "Offensive Security", pages: 288, icon: "🔓",
+    cat: "Offensive Security", pages: 412, icon: "🔓",
     cover: UNSPLASH("1563013544-824ae1b704d3"),
-    desc: "True stories of real hackers who broke into banks, government computers, and the phone system.",
+    desc: "True stories of real hackers who broke into banks, government computers, and the phone system — with full post-mortems and defender takeaways.",
     chapters: [
-      baseChapter(1, "The Mindset of an Intruder", "Every successful intrusion begins long before any packet is sent. The intruder studies the target the way a chess player studies an opponent — looking for the small inconsistencies, the cultural assumptions, and the procedural shortcuts that humans take when nobody is watching. This chapter unpacks the mental models attackers use and shows defenders how to invert them."),
-      baseChapter(2, "Reconnaissance: The Quiet Hour", "Open-source intelligence is the most under-appreciated phase of an attack. Public S3 buckets, exposed Git repositories, employee LinkedIn updates, and conference talks together form a high-resolution map of any organization. We walk through a real engagement where 100% of initial access came from publicly available information."),
-      baseChapter(3, "Social Engineering by Design", "The phone call that compromises a company is rarely a single masterpiece. It is a sequence of small, plausible interactions, each calibrated to extract one more piece of context. Learn the four pillars used by every elite social engineer: pretext, rapport, urgency, and exit."),
-      baseChapter(4, "Physical Access", "Tailgating, badge cloning, and lock bypass remain devastatingly effective. Most data centers fail their first physical assessment because the security model assumed badges could not be cloned. RFID cloners now cost under $30."),
-      baseChapter(5, "Network Footholds", "Initial code execution is rarely the trophy — it is the starting line. Attackers prioritize persistence, credential harvesting, and lateral movement before they touch anything sensitive. We dissect the kill chain of a 2023 breach that cost a Fortune 500 company $80M."),
-      baseChapter(6, "Privilege Escalation", "Misconfigurations, not zero-days, are the workhorse of privilege escalation. SUID binaries, weak service permissions, and overly permissive IAM roles convert a foothold into full domain control. We catalog the top 20 escalation paths observed in 2024 engagements."),
-      baseChapter(7, "Persistence and Stealth", "An attacker who can be evicted has not really won. Modern persistence lives in scheduled tasks, container images, OAuth grants, and cloud workload identities. Detection requires comparing what is to what should be — at every layer."),
-      baseChapter(8, "Exfiltration", "Data leaves the network through the channels defenders trust the most: HTTPS to legitimate cloud providers, DNS, and OAuth-authorized SaaS apps. Volume-based DLP misses everything that matters."),
-      baseChapter(9, "Anti-Forensics", "Sophisticated actors clear logs, time-stomp files, and use living-off-the-land binaries to leave minimal artifacts. Centralized, immutable logging is the single most valuable forensic investment a team can make."),
-      baseChapter(10, "Lessons for the Defender", "Every story in this book exists because a defender made an assumption an attacker did not share. Document your assumptions. Test them. Repeat."),
+      ch(1, "The Mindset of an Intruder",
+        "Every successful intrusion begins long before any packet is sent. The intruder studies the target the way a chess player studies an opponent — looking for the small inconsistencies, the cultural assumptions, and the procedural shortcuts that humans take when nobody is watching." + PARA +
+        "This chapter unpacks the mental models attackers use: hypothesis-driven exploration, cheap experiments over heroic exploits, and a relentless bias toward the path of least resistance. We map the intruder's decision tree against the defender's incident response tree and show, side-by-side, where the two diverge." + PARA +
+        "Case study: a 14-day red-team engagement against a global bank that ended in domain admin without ever firing a CVE. The team won by reading the company's quarterly earnings call transcript and noticing a single sentence about an outsourced help desk in Manila." + PARA +
+        "Defender exercise at the end of the chapter: list every assumption your security architecture makes about user behavior. Then ask, for each one, what would happen if the assumption were false.",
+        1, 3),
+      ch(2, "Reconnaissance: The Quiet Hour",
+        "Open-source intelligence is the most under-appreciated phase of an attack. Public S3 buckets, exposed Git repositories, employee LinkedIn updates, vendor case studies, and conference talks together form a high-resolution map of any organization." + PARA +
+        "We walk through a real engagement where 100% of initial access came from publicly available information — no scanning, no probing, nothing that would trigger an alert. The attacker built an org chart from LinkedIn, identified the SSO provider from a job posting, and discovered the VPN concentrator from a forgotten SSL certificate published on crt.sh." + PARA +
+        "Tools covered: theHarvester, Amass, Shodan, GrayHat Warfare, GitHub dorks, and the underrated power of Google's site: operator. Each is demonstrated against a willing target organization." + PARA +
+        "Defender playbook: subscribe to your own attack surface. Continuous external attack surface management (EASM) tools surface what attackers see, before they act on it.",
+        2, 2),
+      ch(3, "Social Engineering by Design",
+        "The phone call that compromises a company is rarely a single masterpiece. It is a sequence of small, plausible interactions, each calibrated to extract one more piece of context." + PARA +
+        "Learn the four pillars used by every elite social engineer: pretext (a believable reason to be calling), rapport (a moment of shared humanity), urgency (a reason this cannot wait), and exit (a clean disengagement that leaves the target feeling they helped a colleague)." + PARA +
+        "Annotated transcripts of three real social-engineering calls, each rated against the four pillars, with the moment of compromise circled in red.",
+        3, 2),
+      ch(4, "Physical Access",
+        "Tailgating, badge cloning, and lock bypass remain devastatingly effective. Most data centers fail their first physical assessment because the security model assumed badges could not be cloned. RFID cloners now cost under $30 on AliExpress and read most 125 kHz badges through a wallet." + PARA +
+        "We document a physical engagement against a Tier-IV data center: the team walked in carrying a ladder, took the freight elevator to the cage floor, and plugged a Raspberry Pi into a switch port — all in under nine minutes." + PARA +
+        "Counter-measures that actually work: anti-passback, mantraps, two-person rule on sensitive cages, and — most importantly — a culture where challenging an unknown person is rewarded, not awkward.",
+        4, 2),
+      ch(5, "Network Footholds",
+        "Initial code execution is rarely the trophy — it is the starting line. Attackers prioritize persistence, credential harvesting, and lateral movement before they touch anything sensitive." + PARA +
+        "We dissect the kill chain of a 2023 breach that cost a Fortune 500 company $80M: initial access via a Citrix CVE, Cobalt Strike beacon for command and control, Mimikatz for credential dumping, and finally a RClone exfiltration to MEGA over HTTPS — all within 11 days of the patch being released." + PARA +
+        "Detection opportunities at every stage, mapped to MITRE ATT&CK, with sample Sigma rules you can deploy today.",
+        5, 3),
+      ch(6, "Privilege Escalation",
+        "Misconfigurations, not zero-days, are the workhorse of privilege escalation. SUID binaries, weak service permissions, kernel exposure, overly permissive IAM roles, and forgotten Kerberos delegations convert a foothold into full domain control." + PARA +
+        "We catalog the top 20 escalation paths observed in 2024 engagements, including: AD CS ESC1-8, GPO abuse, AWS IAM PassRole, Azure managed identity confusion, and the perennial Linux sudo wildcard injection." + PARA +
+        "BloodHound and PingCastle walkthroughs included — point them at your own AD before someone else does.",
+        6, 2),
+      ch(7, "Persistence and Stealth",
+        "An attacker who can be evicted has not really won. Modern persistence lives in scheduled tasks, container images, OAuth grants, cloud workload identities, and CI/CD pipeline secrets — not just registry run keys." + PARA +
+        "Detection requires comparing what is to what should be — at every layer. We introduce the concept of a 'persistence budget' for defenders: an inventory of every legitimate persistence mechanism in the environment. Anything outside that inventory is, by definition, suspicious.",
+        7, 2),
+      ch(8, "Exfiltration",
+        "Data leaves the network through the channels defenders trust the most: HTTPS to legitimate cloud providers, DNS, OAuth-authorized SaaS apps, and even Slack uploads. Volume-based DLP misses everything that matters." + PARA +
+        "We rebuild a DNS tunneling exfil channel from scratch (45 lines of Python), then show how to detect it with three Zeek queries.",
+        8, 2),
+      ch(9, "Anti-Forensics",
+        "Sophisticated actors clear logs, time-stomp files, and use living-off-the-land binaries to leave minimal artifacts. Centralized, immutable logging is the single most valuable forensic investment a team can make." + PARA +
+        "Hands-on lab: a compromised host where the attacker tried (and failed) to cover their tracks. Reconstruct the timeline from Windows Event Forwarding logs that were already off-host.",
+        9, 2),
+      ch(10, "Lessons for the Defender",
+        "Every story in this book exists because a defender made an assumption an attacker did not share. Document your assumptions. Test them. Repeat." + PARA +
+        "Closing checklist: 30 questions every CISO should be able to answer about their environment. If you cannot answer five of them, you have your next quarter's roadmap.",
+        10, 2),
     ],
   },
   {
     id: 2, slug: "hacking-art-of-exploitation", title: "Hacking: The Art of Exploitation", author: "Jon Erickson", year: 2022,
-    cat: "Technical", pages: 488, icon: "💻",
+    cat: "Technical", pages: 612, icon: "💻",
     cover: UNSPLASH("1555066931-4365d14bab8c"),
-    desc: "A deep dive into exploits, shellcode, network attacks, and cryptographic weaknesses with hands-on examples.",
+    desc: "A deep dive into exploits, shellcode, network attacks, and cryptographic weaknesses with hands-on labs and full source code.",
     chapters: [
-      baseChapter(1, "What is Hacking?", "At its core, hacking is the act of finding clever, unintended uses for systems. This chapter sets the philosophical foundation: every system has emergent behavior the designer did not anticipate, and finding it requires reading like an engineer and thinking like an artist."),
-      baseChapter(2, "Programming Foundations", "C, assembly, and the memory model. Understand how the stack and heap actually work, why pointers are dangerous, and how the compiler's choices shape the attack surface."),
-      baseChapter(3, "Stack-Based Buffer Overflows", "Walk through a vulnerable program byte by byte. Overflow the buffer, overwrite the return address, redirect execution into shellcode. Mitigations (DEP, ASLR, stack canaries) and the techniques that defeat them."),
-      baseChapter(4, "Format String Vulnerabilities", "An overlooked but powerful class of bug. Read arbitrary memory, write arbitrary memory, escalate to code execution — all from a single mishandled printf."),
-      baseChapter(5, "Heap Exploitation", "Modern heap allocators are intricate. Use-after-free, double-free, and tcache poisoning remain practical against unhardened targets. We rebuild a small allocator to make the internals concrete."),
-      baseChapter(6, "Shellcode", "Position-independent assembly that survives whatever environment it lands in. Egg hunters, encoder chains, and how to fit a working payload into the few bytes you actually control."),
-      baseChapter(7, "Networking and Sockets", "Raw sockets, TCP/IP internals, and why network protocols leak more state than their authors intended. Build a minimal sniffer in under 100 lines."),
-      baseChapter(8, "Cryptographic Weaknesses", "ECB mode patterns, weak random number generators, padding oracle attacks, and length extension. The math is approachable; the consequences are not."),
-      baseChapter(9, "Countermeasures and Bypasses", "ROP, JOP, and the long arms race between mitigations and exploitation techniques. The lesson: defense in depth is not a slogan, it's mandatory."),
+      ch(1, "What is Hacking?",
+        "At its core, hacking is the act of finding clever, unintended uses for systems. This chapter sets the philosophical foundation: every system has emergent behavior the designer did not anticipate, and finding it requires reading like an engineer and thinking like an artist." + PARA +
+        "We trace the lineage of the term from MIT's Tech Model Railroad Club through phreaking, the Morris Worm, and modern bug bounty programs. The unifying thread is curiosity disciplined by rigor.",
+        11, 2),
+      ch(2, "Programming Foundations",
+        "C, assembly, and the memory model. Understand how the stack and heap actually work, why pointers are dangerous, and how the compiler's choices shape the attack surface." + PARA +
+        "Hands-on: compile the same program with -O0 and -O3 and diff the resulting assembly. The optimizer's choices are the attacker's opportunities.",
+        12, 2),
+      ch(3, "Stack-Based Buffer Overflows",
+        "Walk through a vulnerable program byte by byte. Overflow the buffer, overwrite the return address, redirect execution into shellcode." + PARA +
+        "Then enable each mitigation in turn — DEP, ASLR, stack canaries, CFI — and watch what breaks. Finally, learn the techniques that defeat each: ret2libc, info leaks, ROP chains.",
+        13, 3),
+      ch(4, "Format String Vulnerabilities",
+        "An overlooked but powerful class of bug. Read arbitrary memory, write arbitrary memory, escalate to code execution — all from a single mishandled printf." + PARA +
+        "Why modern compilers warn about this and why production codebases still ship it.",
+        14, 2),
+      ch(5, "Heap Exploitation",
+        "Modern heap allocators are intricate. Use-after-free, double-free, and tcache poisoning remain practical against unhardened targets." + PARA +
+        "We rebuild a small allocator to make the internals concrete, then break it three different ways.",
+        15, 2),
+      ch(6, "Shellcode",
+        "Position-independent assembly that survives whatever environment it lands in. Egg hunters, encoder chains, and how to fit a working payload into the few bytes you actually control.",
+        16, 2),
+      ch(7, "Networking and Sockets",
+        "Raw sockets, TCP/IP internals, and why network protocols leak more state than their authors intended. Build a minimal sniffer in under 100 lines, then a TCP hijacker in another 200.",
+        17, 2),
+      ch(8, "Cryptographic Weaknesses",
+        "ECB mode patterns, weak random number generators, padding oracle attacks, and length extension. The math is approachable; the consequences are not." + PARA +
+        "Cryptopals-style challenges with full solutions and commentary.",
+        18, 2),
+      ch(9, "Countermeasures and Bypasses",
+        "ROP, JOP, and the long arms race between mitigations and exploitation techniques. The lesson: defense in depth is not a slogan, it's mandatory.",
+        19, 2),
     ],
   },
   {
     id: 3, slug: "web-application-hackers-handbook", title: "The Web Application Hacker's Handbook", author: "Stuttard & Pinto", year: 2024,
-    cat: "Web Security", pages: 912, icon: "🌐",
+    cat: "Web Security", pages: 1024, icon: "🌐",
     cover: UNSPLASH("1526374965328-7f61d4dc18c5"),
-    desc: "The definitive guide to finding and exploiting web application security flaws — OWASP Top 10 and beyond.",
+    desc: "The definitive guide to finding and exploiting web application security flaws — OWASP Top 10 and beyond, with modern API and SPA coverage.",
     chapters: [
-      baseChapter(1, "How Web Apps Fail", "The web stack is a collection of conveniences that defenders pay for. Each layer (browser, framework, ORM, server) trusts data from the layer below in ways the original designers never intended."),
-      baseChapter(2, "Mapping the Application", "Before exploiting anything, map every endpoint, parameter, and authentication boundary. Burp Suite Community + a disciplined methodology will out-perform any automated scanner."),
-      baseChapter(3, "Authentication Flaws", "Credential stuffing, broken session management, MFA bypass, and OAuth misconfigurations. The state of the art has shifted — but the fundamentals haven't."),
-      baseChapter(4, "Injection Attacks", "SQLi is not dead. NoSQL injection, ORM injection, command injection, SSTI, and prototype pollution have inherited its mantle. Parameterized queries are necessary but not sufficient."),
-      baseChapter(5, "Cross-Site Scripting", "Stored, reflected, DOM. Modern frameworks reduce — but do not eliminate — XSS risk. CSP is the safety net you cannot skip."),
-      baseChapter(6, "Access Control", "Insecure Direct Object References (IDOR) remains the most reported bug class on bounty platforms. Test every parameter that points to a resource, with every role you can obtain."),
-      baseChapter(7, "Server-Side Request Forgery", "SSRF is the attack of the cloud era. Metadata services, internal admin panels, and microservice mesh endpoints all become reachable through one badly validated URL parameter."),
-      baseChapter(8, "Modern Concerns: GraphQL, gRPC, WebSockets", "Each new protocol re-introduces the same old mistakes in a new wrapper. We give field-tested checklists for each."),
-      baseChapter(9, "Reporting and Remediation", "A finding is only as useful as its report. Severity scoring, reproduction steps, and remediation advice that engineers can actually act on."),
+      ch(1, "How Web Apps Fail",
+        "The web stack is a collection of conveniences that defenders pay for. Each layer (browser, framework, ORM, server, CDN, WAF) trusts data from the layer below in ways the original designers never intended." + PARA +
+        "A taxonomy of web vulnerabilities organized not by symptom but by root cause: trust boundary violations, parser differentials, and identity confusion.",
+        20, 2),
+      ch(2, "Mapping the Application",
+        "Before exploiting anything, map every endpoint, parameter, and authentication boundary. Burp Suite Community + a disciplined methodology will out-perform any automated scanner." + PARA +
+        "Spidering JavaScript SPAs, harvesting endpoints from sourcemaps, and reverse-engineering GraphQL schemas via introspection.",
+        21, 3),
+      ch(3, "Authentication Flaws",
+        "Credential stuffing, broken session management, MFA bypass, OAuth misconfigurations, and SAML signature wrapping. The state of the art has shifted — but the fundamentals haven't.",
+        22, 2),
+      ch(4, "Injection Attacks",
+        "SQLi is not dead. NoSQL injection, ORM injection, command injection, SSTI, XPath injection, LDAP injection, and prototype pollution have inherited its mantle. Parameterized queries are necessary but not sufficient.",
+        23, 2),
+      ch(5, "Cross-Site Scripting",
+        "Stored, reflected, DOM, mutation, and self-XSS. Modern frameworks reduce — but do not eliminate — XSS risk. CSP is the safety net you cannot skip, and we cover the bypass techniques that make naive CSP useless.",
+        24, 2),
+      ch(6, "Access Control",
+        "Insecure Direct Object References (IDOR) remains the most reported bug class on bounty platforms. Test every parameter that points to a resource, with every role you can obtain — and remember that PATCH endpoints often skip the authorization check that GET enforces.",
+        25, 2),
+      ch(7, "Server-Side Request Forgery",
+        "SSRF is the attack of the cloud era. Metadata services, internal admin panels, and microservice mesh endpoints all become reachable through one badly validated URL parameter." + PARA +
+        "Comprehensive payload library for AWS, Azure, GCP, and on-prem environments.",
+        26, 2),
+      ch(8, "Modern Concerns: GraphQL, gRPC, WebSockets",
+        "Each new protocol re-introduces the same old mistakes in a new wrapper. We give field-tested checklists for each, including batched query DoS, gRPC reflection abuse, and WebSocket origin bypass.",
+        27, 2),
+      ch(9, "Reporting and Remediation",
+        "A finding is only as useful as its report. Severity scoring, reproduction steps, and remediation advice that engineers can actually act on. Templates included.",
+        28, 2),
     ],
   },
   {
     id: 4, slug: "blue-team-handbook", title: "Blue Team Handbook", author: "Don Murdoch", year: 2023,
-    cat: "Blue Team", pages: 204, icon: "🛡️",
+    cat: "Blue Team", pages: 312, icon: "🛡️",
     cover: UNSPLASH("1510511459019-5dda7724fd87"),
-    desc: "Concise reference for incident responders covering detection, analysis, and response procedures with practical checklists.",
+    desc: "Concise reference for incident responders covering detection, analysis, and response procedures with practical checklists and runbooks.",
     chapters: [
-      baseChapter(1, "Incident Response Lifecycle", "Preparation, detection, containment, eradication, recovery, lessons learned. The structure is simple; living it under pressure is not."),
-      baseChapter(2, "Triage Under Pressure", "The first 30 minutes determine the next 30 days. Severity, scope, and stakeholder communication must happen in parallel — not in sequence."),
-      baseChapter(3, "Endpoint Forensics", "Memory acquisition, autoruns, timeline reconstruction. Velociraptor and KAPE have made what used to be artisan work tractable for small teams."),
-      baseChapter(4, "Network Forensics", "PCAP analysis, NetFlow, Zeek. Storage is cheap; visibility you didn't capture cannot be reconstructed."),
-      baseChapter(5, "Log Analysis", "Centralized, time-synchronized, immutable. If two of those three are missing, your investigation will hit a wall."),
-      baseChapter(6, "Containment Strategies", "Network isolation, account disable, credential rotation, EDR isolation. Each has trade-offs against business continuity."),
-      baseChapter(7, "Eradication and Recovery", "Patch, rebuild, restore from known-good. Re-imaging is faster than confidence in cleanup for any non-trivial compromise."),
-      baseChapter(8, "Post-Incident Review", "Blameless retrospectives drive real improvement. Track every action item to closure or it will recur."),
+      ch(1, "Incident Response Lifecycle",
+        "Preparation, detection, containment, eradication, recovery, lessons learned. The structure is simple; living it under pressure is not." + PARA +
+        "Annotated runbook from a real ransomware engagement, hour by hour for the first 72 hours.",
+        29, 2),
+      ch(2, "Triage Under Pressure",
+        "The first 30 minutes determine the next 30 days. Severity, scope, and stakeholder communication must happen in parallel — not in sequence." + PARA +
+        "Decision flowcharts for the most common 'should we pull the plug?' moments.",
+        30, 2),
+      ch(3, "Endpoint Forensics",
+        "Memory acquisition, autoruns, timeline reconstruction. Velociraptor and KAPE have made what used to be artisan work tractable for small teams.",
+        31, 2),
+      ch(4, "Network Forensics",
+        "PCAP analysis, NetFlow, Zeek. Storage is cheap; visibility you didn't capture cannot be reconstructed. A sample Zeek deployment for a 10 Gbps link, on commodity hardware.",
+        32, 2),
+      ch(5, "Log Analysis",
+        "Centralized, time-synchronized, immutable. If two of those three are missing, your investigation will hit a wall.",
+        33, 2),
+      ch(6, "Containment Strategies",
+        "Network isolation, account disable, credential rotation, EDR isolation. Each has trade-offs against business continuity. Pre-approved containment matrix template included.",
+        34, 2),
+      ch(7, "Eradication and Recovery",
+        "Patch, rebuild, restore from known-good. Re-imaging is faster than confidence in cleanup for any non-trivial compromise.",
+        35, 2),
+      ch(8, "Post-Incident Review",
+        "Blameless retrospectives drive real improvement. Track every action item to closure or it will recur. Sample post-mortem template included.",
+        36, 2),
     ],
   },
   {
     id: 5, slug: "threat-intelligence-and-me", title: "Threat Intelligence and Me", author: "Chris Roberts", year: 2024,
-    cat: "Threat Intel", pages: 320, icon: "📡",
+    cat: "Threat Intel", pages: 384, icon: "📡",
     cover: UNSPLASH("1614064641938-3bbee52942c7"),
     desc: "A practical guide to building and operationalizing a threat intelligence program from the ground up.",
     chapters: [
-      baseChapter(1, "What Threat Intel Actually Is", "Strategic, operational, tactical. Most teams skip strategic and drown in tactical. The result: a stream of indicators with no answer to 'so what?'"),
-      baseChapter(2, "Stakeholder Alignment", "Executives, IR, detection engineering, and red team all need different deliverables. Define the audience before producing anything."),
-      baseChapter(3, "Collection Sources", "Open source, paid feeds, ISACs, internal telemetry, and law enforcement partnerships. Each has trade-offs in speed, attribution rigor, and cost."),
-      baseChapter(4, "Analysis Frameworks", "Diamond Model, Kill Chain, MITRE ATT&CK. Use them as common vocabulary, not as ends in themselves."),
-      baseChapter(5, "MISP in Practice", "Stand up an instance, integrate with your SIEM, and curate a sharing community. Open source TI infrastructure that works."),
-      baseChapter(6, "Reporting Cadence", "Daily operational, weekly tactical, monthly executive. Anything less and the program becomes invisible to the people who fund it."),
+      ch(1, "What Threat Intel Actually Is",
+        "Strategic, operational, tactical. Most teams skip strategic and drown in tactical. The result: a stream of indicators with no answer to 'so what?'" + PARA +
+        "Concrete examples of each tier with sample deliverables.",
+        37, 2),
+      ch(2, "Stakeholder Alignment",
+        "Executives, IR, detection engineering, and red team all need different deliverables. Define the audience before producing anything.",
+        38, 2),
+      ch(3, "Collection Sources",
+        "Open source, paid feeds, ISACs, internal telemetry, and law enforcement partnerships. Each has trade-offs in speed, attribution rigor, and cost.",
+        39, 2),
+      ch(4, "Analysis Frameworks",
+        "Diamond Model, Kill Chain, MITRE ATT&CK. Use them as common vocabulary, not as ends in themselves.",
+        40, 2),
+      ch(5, "MISP in Practice",
+        "Stand up an instance, integrate with your SIEM, and curate a sharing community. Open source TI infrastructure that works.",
+        41, 3),
+      ch(6, "Reporting Cadence",
+        "Daily operational, weekly tactical, monthly executive. Anything less and the program becomes invisible to the people who fund it.",
+        42, 2),
     ],
   },
   {
     id: 6, slug: "zero-trust-networks", title: "Zero Trust Networks", author: "Gilman & Barth", year: 2023,
-    cat: "Architecture", pages: 240, icon: "🏗️",
+    cat: "Architecture", pages: 336, icon: "🏗️",
     cover: UNSPLASH("1550751827-4bd374c3f58b"),
     desc: "Building secure systems in untrusted networks. Design principles, protocols, and implementation strategies for ZTA.",
     chapters: [
-      baseChapter(1, "Why Perimeters Failed", "VPN, DMZ, and 'trust but verify' were all rational answers to a problem that no longer exists. The network is not the security boundary anymore."),
-      baseChapter(2, "Identity at the Core", "Workforce identity, workload identity (SPIFFE), and device identity. Authorization becomes a function of all three plus context."),
-      baseChapter(3, "Microsegmentation", "Identity-aware proxies vs. host firewalls vs. service mesh policy. Pick the layer that matches the team that will operate it."),
-      baseChapter(4, "Continuous Verification", "Risk score, device posture, and behavioral signals feed every authorization decision. Static policy is the floor, not the ceiling."),
-      baseChapter(5, "Migration Strategies", "Brownfield reality: you cannot rebuild from scratch. Strangle the perimeter one application at a time."),
-      baseChapter(6, "Operating a Zero Trust Network", "Logging, telemetry, and the operations skills required. The technology is the easy part."),
+      ch(1, "Why Perimeters Failed",
+        "VPN, DMZ, and 'trust but verify' were all rational answers to a problem that no longer exists. The network is not the security boundary anymore." + PARA +
+        "Historical context from the Jericho Forum (2004) to BeyondCorp (2014) to NIST 800-207 (2020).",
+        43, 2),
+      ch(2, "Identity at the Core",
+        "Workforce identity, workload identity (SPIFFE), and device identity. Authorization becomes a function of all three plus context.",
+        44, 2),
+      ch(3, "Microsegmentation",
+        "Identity-aware proxies vs. host firewalls vs. service mesh policy. Pick the layer that matches the team that will operate it.",
+        45, 2),
+      ch(4, "Continuous Verification",
+        "Risk score, device posture, and behavioral signals feed every authorization decision. Static policy is the floor, not the ceiling.",
+        46, 2),
+      ch(5, "Migration Strategies",
+        "Brownfield reality: you cannot rebuild from scratch. Strangle the perimeter one application at a time. 12-month migration roadmap template included.",
+        47, 2),
+      ch(6, "Operating a Zero Trust Network",
+        "Logging, telemetry, and the operations skills required. The technology is the easy part.",
+        48, 2),
     ],
   },
   {
     id: 7, slug: "practical-malware-analysis", title: "Practical Malware Analysis", author: "Sikorski & Honig", year: 2022,
-    cat: "Malware", pages: 800, icon: "🦠",
+    cat: "Malware", pages: 904, icon: "🦠",
     cover: UNSPLASH("1526374965328-7f61d4dc18c5"),
     desc: "The hands-on guide to dissecting malicious software. Tools, techniques, and processes used by professional analysts.",
     chapters: [
-      baseChapter(1, "Setting Up a Lab", "Isolated VMs, snapshot discipline, network segmentation. Rule one: assume the malware will try to detect and escape your sandbox."),
-      baseChapter(2, "Static Analysis Basics", "Strings, imports, entropy, signature checks. Cheap, fast, often enough to triage."),
-      baseChapter(3, "Dynamic Analysis", "Procmon, API monitor, network capture, memory snapshots. What the binary actually does, not what it claims to do."),
-      baseChapter(4, "Disassembly with IDA / Ghidra", "Reading optimized assembly, identifying compiler patterns, recovering control flow. Ghidra closed the price gap; the skill remains."),
-      baseChapter(5, "Anti-Analysis Techniques", "Packers, anti-debug, anti-VM, control flow obfuscation. The arms race never ends."),
-      baseChapter(6, "Shellcode Analysis", "Position-independent code, decoder loops, second-stage payloads. Manual unpacking step by step."),
-      baseChapter(7, "Reporting", "What an IR team needs from you in 30 minutes vs. 30 hours. Write for the audience that has to act on the analysis."),
+      ch(1, "Setting Up a Lab",
+        "Isolated VMs, snapshot discipline, network segmentation. Rule one: assume the malware will try to detect and escape your sandbox." + PARA +
+        "Full lab build using REMnux, FLARE-VM, and INetSim — step-by-step screenshots included.",
+        49, 2),
+      ch(2, "Static Analysis Basics",
+        "Strings, imports, entropy, signature checks. Cheap, fast, often enough to triage.",
+        50, 2),
+      ch(3, "Dynamic Analysis",
+        "Procmon, API monitor, network capture, memory snapshots. What the binary actually does, not what it claims to do.",
+        51, 2),
+      ch(4, "Disassembly with IDA / Ghidra",
+        "Reading optimized assembly, identifying compiler patterns, recovering control flow. Ghidra closed the price gap; the skill remains.",
+        52, 3),
+      ch(5, "Anti-Analysis Techniques",
+        "Packers, anti-debug, anti-VM, control flow obfuscation. The arms race never ends.",
+        53, 2),
+      ch(6, "Shellcode Analysis",
+        "Position-independent code, decoder loops, second-stage payloads. Manual unpacking step by step.",
+        54, 2),
+      ch(7, "Reporting",
+        "What an IR team needs from you in 30 minutes vs. 30 hours. Write for the audience that has to act on the analysis.",
+        55, 2),
     ],
   },
   {
     id: 8, slug: "social-engineering-human-hacking", title: "Social Engineering: The Science of Human Hacking", author: "Christopher Hadnagy", year: 2023,
-    cat: "Social Engineering", pages: 320, icon: "🎭",
+    cat: "Social Engineering", pages: 384, icon: "🎭",
     cover: UNSPLASH("1573164574572-cb89e39749b4"),
     desc: "Understanding the psychological principles behind manipulation and how to build human-centered security awareness programs.",
     chapters: [
-      baseChapter(1, "The Psychology of Influence", "Cialdini's six principles applied at the keyboard. Reciprocity, scarcity, authority, consistency, liking, social proof — every successful pretext leans on at least two."),
-      baseChapter(2, "OSINT for Pretexting", "Public profiles, breach data, conference attendance, even Strava routes. The pretext writes itself once you have enough context."),
-      baseChapter(3, "Phishing Campaigns", "Designing emails that pass technical filters and human pattern recognition. The metric that matters is click rate by department, tracked over time."),
-      baseChapter(4, "Vishing and Smishing", "Voice and SMS-based attacks. Caller-ID spoofing, voice cloning, and trust transfer techniques. Detection lags badly here."),
-      baseChapter(5, "Physical Pretexting", "Tailgating, vendor impersonation, repair-tech disguises. Most badges fail an impersonation test in under five minutes."),
-      baseChapter(6, "Building Resilient Humans", "Security awareness that actually changes behavior. Quarterly simulations, immediate just-in-time coaching, and a no-blame reporting culture."),
+      ch(1, "The Psychology of Influence",
+        "Cialdini's six principles applied at the keyboard. Reciprocity, scarcity, authority, consistency, liking, social proof — every successful pretext leans on at least two." + PARA +
+        "Real call recordings annotated against each principle.",
+        56, 2),
+      ch(2, "OSINT for Pretexting",
+        "Public profiles, breach data, conference attendance, even Strava routes. The pretext writes itself once you have enough context.",
+        57, 2),
+      ch(3, "Phishing Campaigns",
+        "Designing emails that pass technical filters and human pattern recognition. The metric that matters is click rate by department, tracked over time.",
+        58, 2),
+      ch(4, "Vishing and Smishing",
+        "Voice and SMS-based attacks. Caller-ID spoofing, voice cloning, and trust transfer techniques. Detection lags badly here.",
+        59, 2),
+      ch(5, "Physical Pretexting",
+        "Tailgating, vendor impersonation, repair-tech disguises. Most badges fail an impersonation test in under five minutes.",
+        60, 2),
+      ch(6, "Building Resilient Humans",
+        "Security awareness that actually changes behavior. Quarterly simulations, immediate just-in-time coaching, and a no-blame reporting culture.",
+        61, 2),
     ],
   },
 ];
