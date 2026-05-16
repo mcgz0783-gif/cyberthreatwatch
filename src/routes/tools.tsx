@@ -9,9 +9,16 @@ export const Route = createFileRoute("/tools")({
   head: () => ({
     meta: [
       { title: "Cybersecurity Tools — Free Platforms Directory" },
-      { name: "description", content: "Curated free cybersecurity tools — VPN, antivirus, CVE search, threat maps, malware sandboxes, breach lookups and more. Each links to a world-class platform." },
+      {
+        name: "description",
+        content:
+          "Curated free cybersecurity tools — VPN, antivirus, CVE search, threat maps, malware sandboxes, breach lookups and more. Each links to a world-class platform.",
+      },
       { property: "og:title", content: "Cybersecurity Tools — Free Platforms Directory" },
-      { property: "og:description", content: "Free cybersecurity tools and platforms hand-picked for defenders." },
+      {
+        property: "og:description",
+        content: "Free cybersecurity tools and platforms hand-picked for defenders.",
+      },
       { property: "og:url", content: `${BASE}/tools` },
     ],
     links: [{ rel: "canonical", href: `${BASE}/tools` }],
@@ -22,8 +29,12 @@ export const Route = createFileRoute("/tools")({
 function ToolsPage() {
   const [q, setQ] = useState("");
   const filtered = useMemo(
-    () => TOOLS.filter((t) => !q || (t.name + t.provider + t.category + t.desc).toLowerCase().includes(q.toLowerCase())),
-    [q]
+    () =>
+      TOOLS.filter(
+        (t) =>
+          !q || (t.name + t.provider + t.category + t.desc).toLowerCase().includes(q.toLowerCase()),
+      ),
+    [q],
   );
 
   return (

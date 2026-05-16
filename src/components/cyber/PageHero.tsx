@@ -1,8 +1,16 @@
 import type { ReactNode } from "react";
 
 export function PageHero({
-  eyebrow, title, subtitle, children,
-}: { eyebrow: string; title: string; subtitle?: string; children?: ReactNode }) {
+  eyebrow,
+  title,
+  subtitle,
+  children,
+}: {
+  eyebrow: string;
+  title: string;
+  subtitle?: string;
+  children?: ReactNode;
+}) {
   return (
     <section className="relative overflow-hidden border-b border-border bg-gradient-hero">
       <div className="absolute inset-0 grid-bg opacity-60" />
@@ -12,9 +20,7 @@ export function PageHero({
           {title}
         </h1>
         {subtitle && (
-          <p className="mt-5 max-w-2xl text-base sm:text-lg text-muted-foreground">
-            {subtitle}
-          </p>
+          <p className="mt-5 max-w-2xl text-base sm:text-lg text-muted-foreground">{subtitle}</p>
         )}
         {children && <div className="mt-8">{children}</div>}
       </div>

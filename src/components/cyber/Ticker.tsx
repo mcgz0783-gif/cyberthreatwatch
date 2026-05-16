@@ -12,10 +12,7 @@ export function Ticker() {
         <div className="flex-1 overflow-hidden">
           <div className="flex animate-ticker whitespace-nowrap">
             {all.map((item, i) => (
-              <span
-                key={i}
-                className="px-8 py-2 font-mono-cyber text-sm text-cyber-text"
-              >
+              <span key={i} className="px-8 py-2 font-mono-cyber text-sm text-cyber-text">
                 {item}
               </span>
             ))}

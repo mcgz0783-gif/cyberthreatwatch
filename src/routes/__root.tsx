@@ -28,7 +28,9 @@ function NotFoundComponent() {
           The route you're targeting is offline or has been decommissioned.
         </p>
         <div className="mt-6">
-          <Link to="/" className="btn-cyber">Return to Base</Link>
+          <Link to="/" className="btn-cyber">
+            Return to Base
+          </Link>
         </div>
       </div>
     </div>
@@ -52,12 +54,17 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
-            onClick={() => { router.invalidate(); reset(); }}
+            onClick={() => {
+              router.invalidate();
+              reset();
+            }}
             className="btn-cyber"
           >
             Try Again
           </button>
-          <Link to="/" className="btn-ghost-cyber">Go Home</Link>
+          <Link to="/" className="btn-ghost-cyber">
+            Go Home
+          </Link>
         </div>
       </div>
     </div>
@@ -70,16 +77,36 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "CyberSec Updates — Real-Time Threat Intelligence" },
-      { name: "description", content: "Real-time cybersecurity news, threat intelligence, deep-dive insights, and curated resources for security professionals." },
+      {
+        name: "description",
+        content:
+          "Real-time cybersecurity news, threat intelligence, deep-dive insights, and curated resources for security professionals.",
+      },
       { name: "author", content: "CyberSec Updates" },
       { property: "og:title", content: "CyberSec Updates — Real-Time Threat Intelligence" },
-      { property: "og:description", content: "Real-time cybersecurity news, threat intelligence, deep-dive insights, and curated resources for security professionals." },
+      {
+        property: "og:description",
+        content:
+          "Real-time cybersecurity news, threat intelligence, deep-dive insights, and curated resources for security professionals.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "CyberSec Updates — Real-Time Threat Intelligence" },
-      { name: "twitter:description", content: "Real-time cybersecurity news, threat intelligence, deep-dive insights, and curated resources for security professionals." },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/e3f8d773-3aa7-4241-bad0-748077359c3f" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/e3f8d773-3aa7-4241-bad0-748077359c3f" },
+      {
+        name: "twitter:description",
+        content:
+          "Real-time cybersecurity news, threat intelligence, deep-dive insights, and curated resources for security professionals.",
+      },
+      {
+        property: "og:image",
+        content:
+          "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/e3f8d773-3aa7-4241-bad0-748077359c3f",
+      },
+      {
+        name: "twitter:image",
+        content:
+          "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/e3f8d773-3aa7-4241-bad0-748077359c3f",
+      },
     ],
     links: [{ rel: "stylesheet", href: appCss }],
   }),

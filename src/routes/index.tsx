@@ -7,7 +7,11 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "CyberSec Updates — Real-Time Threat Intelligence" },
-      { name: "description", content: "Live cyber threat feed, curated news, deep-dive insights, and a security knowledge base for defenders." },
+      {
+        name: "description",
+        content:
+          "Live cyber threat feed, curated news, deep-dive insights, and a security knowledge base for defenders.",
+      },
       { property: "og:url", content: "https://cyberthreatwatch.lovable.app/" },
     ],
     links: [{ rel: "canonical", href: "https://cyberthreatwatch.lovable.app/" }],
@@ -25,7 +29,10 @@ function HomePage() {
           <div className="max-w-3xl">
             <div className="eyebrow mb-5">
               <span className="w-2 h-2 rounded-full bg-cyber-green animate-blink" />
-              SYSTEM ONLINE // {new Date().toLocaleDateString("en", { month: "short", day: "2-digit", year: "numeric" }).toUpperCase()}
+              SYSTEM ONLINE //{" "}
+              {new Date()
+                .toLocaleDateString("en", { month: "short", day: "2-digit", year: "numeric" })
+                .toUpperCase()}
             </div>
             <h1 className="font-display font-black text-5xl sm:text-6xl lg:text-7xl text-cyber-white uppercase leading-[1.02] tracking-tight">
               Cyber Threat
@@ -37,8 +44,12 @@ function HomePage() {
               breaches, nation-state campaigns, and the tools to stay ahead of them.
             </p>
             <div className="mt-10 flex flex-wrap gap-3">
-              <Link to="/news" className="btn-cyber">Latest Threats →</Link>
-              <Link to="/insights" className="btn-ghost-cyber">Read Insights</Link>
+              <Link to="/news" className="btn-cyber">
+                Latest Threats →
+              </Link>
+              <Link to="/insights" className="btn-ghost-cyber">
+                Read Insights
+              </Link>
             </div>
           </div>
 
@@ -62,8 +73,14 @@ function HomePage() {
       {/* LATEST NEWS */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="flex items-end justify-between flex-wrap gap-4 mb-10">
-          <SectionHeader eyebrow="Threat Feed" title="Latest News" subtitle="Critical incidents and disclosures from the last 72 hours." />
-          <Link to="/news" className="btn-ghost-cyber !py-2 !px-4 !text-xs">View All →</Link>
+          <SectionHeader
+            eyebrow="Threat Feed"
+            title="Latest News"
+            subtitle="Critical incidents and disclosures from the last 72 hours."
+          />
+          <Link to="/news" className="btn-ghost-cyber !py-2 !px-4 !text-xs">
+            View All →
+          </Link>
         </div>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {NEWS.slice(0, 3).map((n) => (
@@ -75,7 +92,11 @@ function HomePage() {
       {/* INSIGHTS */}
       <section className="bg-surface border-y border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-          <SectionHeader eyebrow="Deep Dive" title="Featured Insights" subtitle="Long-form analysis from researchers and CISOs across the industry." />
+          <SectionHeader
+            eyebrow="Deep Dive"
+            title="Featured Insights"
+            subtitle="Long-form analysis from researchers and CISOs across the industry."
+          />
           <div className="grid gap-6 lg:grid-cols-2">
             {INSIGHTS.slice(0, 2).map((i) => (
               <InsightCard key={i.id} item={i} />
@@ -87,8 +108,14 @@ function HomePage() {
       {/* TOOLS */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="flex items-end justify-between flex-wrap gap-4 mb-10">
-          <SectionHeader eyebrow="Toolkit" title="Operator Tools" subtitle="Open intelligence and verification utilities — each links to a free, world-class platform." />
-          <Link to="/tools" className="btn-ghost-cyber !py-2 !px-4 !text-xs">All Tools →</Link>
+          <SectionHeader
+            eyebrow="Toolkit"
+            title="Operator Tools"
+            subtitle="Open intelligence and verification utilities — each links to a free, world-class platform."
+          />
+          <Link to="/tools" className="btn-ghost-cyber !py-2 !px-4 !text-xs">
+            All Tools →
+          </Link>
         </div>
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {TOOLS.slice(0, 6).map((t) => (
@@ -118,7 +145,9 @@ function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="flex items-end justify-between flex-wrap gap-4 mb-10">
             <SectionHeader eyebrow="Field Notes" title="From the Blog" />
-            <Link to="/blog" className="btn-ghost-cyber !py-2 !px-4 !text-xs">All Posts →</Link>
+            <Link to="/blog" className="btn-ghost-cyber !py-2 !px-4 !text-xs">
+              All Posts →
+            </Link>
           </div>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {BLOGS.slice(0, 3).map((b) => (

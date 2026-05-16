@@ -8,9 +8,16 @@ export const Route = createFileRoute("/blog")({
   head: () => ({
     meta: [
       { title: "Blog — CyberSec Updates" },
-      { name: "description", content: "Practitioner blog posts on Zero Trust, K8s security, SOC operations, bug bounty, threat intel, and more." },
+      {
+        name: "description",
+        content:
+          "Practitioner blog posts on Zero Trust, K8s security, SOC operations, bug bounty, threat intel, and more.",
+      },
       { property: "og:title", content: "Blog — CyberSec Updates" },
-      { property: "og:description", content: "Practitioner blog posts from cybersecurity professionals." },
+      {
+        property: "og:description",
+        content: "Practitioner blog posts from cybersecurity professionals.",
+      },
       { property: "og:url", content: "https://cyberthreatwatch.lovable.app/blog" },
     ],
     links: [{ rel: "canonical", href: "https://cyberthreatwatch.lovable.app/blog" }],
@@ -23,9 +30,10 @@ function BlogPage() {
   const filtered = useMemo(
     () =>
       BLOGS.filter(
-        (b) => !q || (b.title + b.summary + b.author + b.cat).toLowerCase().includes(q.toLowerCase())
+        (b) =>
+          !q || (b.title + b.summary + b.author + b.cat).toLowerCase().includes(q.toLowerCase()),
       ),
-    [q]
+    [q],
   );
 
   return (

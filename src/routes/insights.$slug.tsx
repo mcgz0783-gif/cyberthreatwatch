@@ -16,14 +16,21 @@ export const Route = createFileRoute("/insights/$slug")({
       { property: "og:description", content: loaderData?.item.key },
       { property: "og:image", content: loaderData?.item.cover },
       { property: "og:type", content: "article" },
-      { property: "og:url", content: `https://cyberthreatwatch.lovable.app/insights/${params.slug}` },
+      {
+        property: "og:url",
+        content: `https://cyberthreatwatch.lovable.app/insights/${params.slug}`,
+      },
     ],
-    links: [{ rel: "canonical", href: `https://cyberthreatwatch.lovable.app/insights/${params.slug}` }],
+    links: [
+      { rel: "canonical", href: `https://cyberthreatwatch.lovable.app/insights/${params.slug}` },
+    ],
   }),
   notFoundComponent: () => (
     <div className="max-w-3xl mx-auto px-4 py-24 text-center">
       <h1 className="font-display text-3xl text-cyber-white mb-4">Insight not found</h1>
-      <Link to="/insights" className="btn-cyber">← Back to insights</Link>
+      <Link to="/insights" className="btn-cyber">
+        ← Back to insights
+      </Link>
     </div>
   ),
   component: InsightDetail,
@@ -34,12 +41,20 @@ function InsightDetail() {
   return (
     <article>
       <div className="relative h-[40vh] min-h-[280px] overflow-hidden border-b border-border">
-        <img src={item.cover} alt={item.title} className="absolute inset-0 w-full h-full object-cover" />
+        <img
+          src={item.cover}
+          alt={item.title}
+          className="absolute inset-0 w-full h-full object-cover"
+        />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/20" />
         <div className="absolute inset-0 grid-bg opacity-40" />
         <div className="relative max-w-4xl mx-auto h-full px-4 sm:px-6 lg:px-8 flex flex-col justify-end pb-10">
-          <div className="mb-3"><Tag>{item.cat}</Tag></div>
-          <h1 className="font-display font-black text-3xl sm:text-5xl text-cyber-white leading-tight max-w-3xl">{item.title}</h1>
+          <div className="mb-3">
+            <Tag>{item.cat}</Tag>
+          </div>
+          <h1 className="font-display font-black text-3xl sm:text-5xl text-cyber-white leading-tight max-w-3xl">
+            {item.title}
+          </h1>
           <p className="mt-3 font-mono-cyber text-xs text-muted-foreground">
             {item.author} · {item.date} · ⏱ {item.read}
           </p>
@@ -59,7 +74,9 @@ function InsightDetail() {
         ))}
 
         <div className="mt-12 pt-8 border-t border-border">
-          <Link to="/insights" className="btn-ghost-cyber !py-2 !px-4 !text-xs">← All insights</Link>
+          <Link to="/insights" className="btn-ghost-cyber !py-2 !px-4 !text-xs">
+            ← All insights
+          </Link>
         </div>
       </div>
     </article>

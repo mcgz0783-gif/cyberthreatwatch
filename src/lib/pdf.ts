@@ -1,6 +1,9 @@
 import jsPDF from "jspdf";
 
-export interface PdfChapter { title: string; body: string }
+export interface PdfChapter {
+  title: string;
+  body: string;
+}
 
 export function generateBookPdf(opts: {
   title: string;
