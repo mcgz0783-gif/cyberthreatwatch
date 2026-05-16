@@ -42,7 +42,7 @@ export const Route = createFileRoute("/books/$id")({
             bookFormat: "https://schema.org/EBook",
             image: loaderData.book.cover,
             description: loaderData.book.desc,
-            hasPart: loaderData.book.chapters.map((c, i) => ({
+            hasPart: loaderData.book.chapters.map((c: typeof book.chapters[number], i: number) => ({
               "@type": "Chapter",
               name: c.title,
               position: i + 1,
@@ -267,7 +267,7 @@ function BookReader() {
         </button>
         {overviewOpen && (
           <ol className="divide-y divide-border/40">
-            {book.chapters.map((c, i) => (
+            {book.chapters.map((c: typeof book.chapters[number], i: number) => (
               <li key={i}>
                 <button
                   onClick={() => setChapter(i)}
@@ -307,7 +307,7 @@ function BookReader() {
         </button>
         {tocOpen && (
           <div className="mt-2 border border-border rounded bg-surface max-h-72 overflow-auto">
-            {book.chapters.map((c, i) => (
+            {book.chapters.map((c: typeof book.chapters[number], i: number) => (
               <button
                 key={i}
                 onClick={() => setChapter(i)}
@@ -324,7 +324,7 @@ function BookReader() {
       <div ref={readerRef} className="grid md:grid-cols-[220px_1fr] gap-8 scroll-mt-24">
         <nav className="hidden md:block md:sticky md:top-32 md:self-start space-y-1 max-h-[calc(100vh-10rem)] overflow-auto pr-2">
           <div className="eyebrow mb-2">Chapters</div>
-          {book.chapters.map((c, i) => (
+          {book.chapters.map((c: typeof book.chapters[number], i: number) => (
             <button
               key={i}
               onClick={() => setChapter(i)}
@@ -391,7 +391,7 @@ function BookReader() {
             </figure>
           )}
 
-          {paragraphs.map((para, i) => {
+          {paragraphs.map((para: string, i: number) => {
             const caption = `FIG. ${chapter + 1}.${i + 2} — Visual reference`;
             return (
               <div key={i}>
