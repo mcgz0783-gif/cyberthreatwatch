@@ -234,7 +234,7 @@ function BookReader() {
           {(() => {
             const paragraphs = ch.body.split(/\n\n+/);
             const extraImgs = ch.images?.slice(1) ?? [];
-            return paragraphs.map((para, i) => (
+            return paragraphs.map((para: string, i: number) => (
               <div key={i}>
                 <p className={`text-cyber-text leading-relaxed mb-6 ${FONT_SIZES[fontIdx]}`}>
                   {para}
