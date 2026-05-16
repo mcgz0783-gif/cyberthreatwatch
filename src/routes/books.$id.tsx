@@ -216,9 +216,45 @@ function BookReader() {
           </div>
 
           <h2 className="font-display font-bold text-2xl sm:text-3xl text-cyber-white mb-6">{ch.title}</h2>
-          <p className={`text-cyber-text leading-relaxed whitespace-pre-line ${FONT_SIZES[fontIdx]}`}>
-            {ch.body}
-          </p>
+
+          {ch.images && ch.images.length > 0 && (
+            <figure className="mb-8 rounded overflow-hidden border border-border">
+              <img
+                src={ch.images[0]}
+                alt={`${ch.title} — illustration`}
+                loading="lazy"
+                className="w-full h-64 sm:h-80 object-cover"
+              />
+              <figcaption className="px-4 py-2 text-xs font-mono-cyber text-muted-foreground bg-surface border-t border-border">
+                FIG. {chapter + 1}.1 — {ch.title.replace(/^Chapter \d+:\s*/, "")}
+              </figcaption>
+            </figure>
+          )}
+
+          {(() => {
+            const paragraphs = ch.body.split(/\n\n+/);
+            const extraImgs = ch.images?.slice(1) ?? [];
+            return paragraphs.map((para: string, i: number) => (
+              <div key={i}>
+                <p className={`text-cyber-text leading-relaxed mb-6 ${FONT_SIZES[fontIdx]}`}>
+                  {para}
+                </p>
+                {extraImgs[i] && (
+                  <figure className="my-8 rounded overflow-hidden border border-border">
+                    <img
+                      src={extraImgs[i]}
+                      alt={`${ch.title} — figure ${i + 2}`}
+                      loading="lazy"
+                      className="w-full h-56 sm:h-72 object-cover"
+                    />
+                    <figcaption className="px-4 py-2 text-xs font-mono-cyber text-muted-foreground bg-surface border-t border-border">
+                      FIG. {chapter + 1}.{i + 2} — Visual reference
+                    </figcaption>
+                  </figure>
+                )}
+              </div>
+            ));
+          })()}
 
           <div className="mt-10 pt-6 border-t border-border flex items-center justify-between gap-3">
             <button
