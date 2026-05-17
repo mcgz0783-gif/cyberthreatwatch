@@ -42,7 +42,7 @@ export const Route = createFileRoute("/books/$id")({
             bookFormat: "https://schema.org/EBook",
             image: loaderData.book.cover,
             description: loaderData.book.desc,
-            hasPart: loaderData.book.chapters.map((c: typeof book.chapters[number], i: number) => ({
+            hasPart: loaderData.book.chapters.map((c: { title: string }, i: number) => ({
               "@type": "Chapter",
               name: c.title,
               position: i + 1,
