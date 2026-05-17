@@ -192,10 +192,18 @@ function BookReader() {
     return () => window.removeEventListener("keydown", onKey);
   }, [goPrev, goNext, lightbox]);
 
-  // Lock body scroll while lightbox is open
+  // Lock body scroll + manage focus while lightbox is open (a11y)
   useEffect(() => {
     if (typeof document === "undefined") return;
-    document.body.style.overflow = lightbox ? "hidden" : "";
+    if (lightbox) {
+      lastFocusedRef.current = document.activeElement as HTMLElement | null;
+      document.body.style.overflow = "hidden";
+      // Defer focus until modal mounts
+      requestAnimationFrame(() => lightboxCloseRef.current?.focus());
+    } else {
+      document.body.style.overflow = "";
+      lastFocusedRef.current?.focus?.();
+    }
     return () => { document.body.style.overflow = ""; };
   }, [lightbox]);
 
