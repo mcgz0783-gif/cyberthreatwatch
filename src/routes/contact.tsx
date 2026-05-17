@@ -33,7 +33,9 @@ function ContactPage() {
       <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 grid gap-10 lg:grid-cols-[1fr_2fr]">
         <aside className="space-y-6">
           {[
-            { icon: "📧", label: "Email", val: "ops@cybersec.updates" },
+            { icon: "📧", label: "Email", val: "ops@cybersec.updates", href: "mailto:ops@cybersec.updates" },
+            { icon: "📞", label: "Phone", val: "0783 699 626", href: "tel:+254783699626" },
+            { icon: "💬", label: "WhatsApp", val: "0788 213 106", href: "https://wa.me/254788213106" },
             { icon: "🔐", label: "PGP Key", val: "0xDEAD BEEF C0DE F00D" },
             { icon: "🛰️", label: "Signal", val: "@cybersec.42" },
             { icon: "🌐", label: "HQ", val: "Distributed / Global" },
@@ -43,7 +45,18 @@ function ContactPage() {
               <div className="font-mono-cyber text-[11px] tracking-widest text-muted-foreground uppercase mb-1">
                 {c.label}
               </div>
-              <div className="font-mono-cyber text-sm text-cyber-white break-all">{c.val}</div>
+              {c.href ? (
+                <a
+                  href={c.href}
+                  target={c.href.startsWith("http") ? "_blank" : undefined}
+                  rel={c.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                  className="font-mono-cyber text-sm text-cyber-white break-all hover:text-accent transition"
+                >
+                  {c.val}
+                </a>
+              ) : (
+                <div className="font-mono-cyber text-sm text-cyber-white break-all">{c.val}</div>
+              )}
             </div>
           ))}
         </aside>
