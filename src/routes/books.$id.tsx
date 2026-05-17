@@ -100,6 +100,24 @@ function BookReader() {
     setTocOpen(false);
   }, [chapter]);
 
+  // Reading analytics — record a view + dwell time per chapter
+  useEffect(() => {
+    recordChapterView(String(book.id), book.title, chapter);
+    const start = Date.now();
+    const flush = (completed?: boolean) => {
+      const secs = (Date.now() - start) / 1000;
+      recordChapterDwell(String(book.id), book.title, chapter, secs, completed);
+    };
+    const onHide = () => { if (document.visibilityState === "hidden") flush(); };
+    document.addEventListener("visibilitychange", onHide);
+    window.addEventListener("pagehide", () => flush());
+    return () => {
+      document.removeEventListener("visibilitychange", onHide);
+      const isLast = chapter === book.chapters.length - 1;
+      flush(isLast);
+    };
+  }, [chapter, book.id, book.title, book.chapters.length]);
+
   const ch = book.chapters[chapter];
   const progress = ((chapter + 1) / book.chapters.length) * 100;
 
