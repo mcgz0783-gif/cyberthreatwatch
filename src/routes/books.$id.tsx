@@ -485,13 +485,22 @@ function BookReader() {
           className="fixed inset-0 z-[100] bg-background/95 backdrop-blur-sm flex items-center justify-center p-4 sm:p-8 animate-in fade-in"
           role="dialog"
           aria-modal="true"
-          aria-label={lightbox.caption}
+          aria-labelledby="lightbox-caption"
+          aria-describedby="lightbox-hint"
           onClick={() => setLightbox(null)}
+          onKeyDown={(e) => {
+            // Simple focus trap — only one focusable (close button), so trap Tab on it
+            if (e.key === "Tab") {
+              e.preventDefault();
+              lightboxCloseRef.current?.focus();
+            }
+          }}
         >
           <button
-            onClick={() => setLightbox(null)}
-            className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full border border-border bg-surface/80 backdrop-blur text-cyber-white text-xl flex items-center justify-center hover:bg-accent hover:text-background transition"
-            aria-label="Close lightbox"
+            ref={lightboxCloseRef}
+            onClick={(e) => { e.stopPropagation(); setLightbox(null); }}
+            className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full border border-border bg-surface/80 backdrop-blur text-cyber-white text-xl flex items-center justify-center hover:bg-accent hover:text-background focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none transition"
+            aria-label="Close image viewer"
           >
             ✕
           </button>
