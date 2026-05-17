@@ -8,8 +8,8 @@ export function Footer() {
         <div className="md:col-span-2 space-y-4">
           <Logo />
           <p className="text-sm text-muted-foreground max-w-md">
-            Real-time cybersecurity intelligence, threat analysis, and deep-dive research for
-            defenders, builders, and decision-makers.
+            Real-time cybersecurity intelligence, threat analysis, and deep-dive
+            research for defenders, builders, and decision-makers.
           </p>
           <div className="flex gap-3 font-mono-cyber text-xs text-muted-foreground">
             <span>SECURE</span>
@@ -24,26 +24,10 @@ export function Footer() {
             Sections
           </h4>
           <ul className="space-y-2 text-sm">
-            <li>
-              <Link to="/news" className="hover:text-accent transition">
-                News
-              </Link>
-            </li>
-            <li>
-              <Link to="/insights" className="hover:text-accent transition">
-                Insights
-              </Link>
-            </li>
-            <li>
-              <Link to="/blog" className="hover:text-accent transition">
-                Blog
-              </Link>
-            </li>
-            <li>
-              <Link to="/books" className="hover:text-accent transition">
-                Books
-              </Link>
-            </li>
+            <li><Link to="/news" className="hover:text-accent transition">News</Link></li>
+            <li><Link to="/insights" className="hover:text-accent transition">Insights</Link></li>
+            <li><Link to="/blog" className="hover:text-accent transition">Blog</Link></li>
+            <li><Link to="/books" className="hover:text-accent transition">Books</Link></li>
           </ul>
         </div>
         <div>
@@ -51,26 +35,10 @@ export function Footer() {
             Company
           </h4>
           <ul className="space-y-2 text-sm">
-            <li>
-              <Link to="/about" className="hover:text-accent transition">
-                About
-              </Link>
-            </li>
-            <li>
-              <Link to="/contact" className="hover:text-accent transition">
-                Contact
-              </Link>
-            </li>
-            <li>
-              <Link to="/faq" className="hover:text-accent transition">
-                FAQ
-              </Link>
-            </li>
-            <li>
-              <Link to="/privacy" className="hover:text-accent transition">
-                Privacy
-              </Link>
-            </li>
+            <li><Link to="/about" className="hover:text-accent transition">About</Link></li>
+            <li><Link to="/contact" className="hover:text-accent transition">Contact</Link></li>
+            <li><Link to="/faq" className="hover:text-accent transition">FAQ</Link></li>
+            <li><Link to="/privacy" className="hover:text-accent transition">Privacy</Link></li>
           </ul>
         </div>
       </div>

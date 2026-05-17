@@ -10,9 +10,7 @@ export const Route = createFileRoute("/books/$id")({
   notFoundComponent: () => (
     <div className="max-w-3xl mx-auto px-4 py-24 text-center">
       <h1 className="font-display text-3xl text-cyber-white mb-4">Book not found</h1>
-      <Link to="/books" className="btn-cyber">
-        ← Back to library
-      </Link>
+      <Link to="/books" className="btn-cyber">← Back to library</Link>
     </div>
   ),
   loader: ({ params }) => {
@@ -32,29 +30,25 @@ export const Route = createFileRoute("/books/$id")({
     ],
     links: [{ rel: "canonical", href: `${BASE}/books/${params.id}` }],
     scripts: loaderData
-      ? [
-          {
-            type: "application/ld+json",
-            children: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Book",
-              name: loaderData.book.title,
-              author: { "@type": "Person", name: loaderData.book.author },
-              datePublished: String(loaderData.book.year),
-              numberOfPages: loaderData.book.pages,
-              bookFormat: "https://schema.org/EBook",
-              image: loaderData.book.cover,
-              description: loaderData.book.desc,
-              hasPart: loaderData.book.chapters.map(
-                (c: (typeof book.chapters)[number], i: number) => ({
-                  "@type": "Chapter",
-                  name: c.title,
-                  position: i + 1,
-                }),
-              ),
-            }),
-          },
-        ]
+      ? [{
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Book",
+            name: loaderData.book.title,
+            author: { "@type": "Person", name: loaderData.book.author },
+            datePublished: String(loaderData.book.year),
+            numberOfPages: loaderData.book.pages,
+            bookFormat: "https://schema.org/EBook",
+            image: loaderData.book.cover,
+            description: loaderData.book.desc,
+            hasPart: loaderData.book.chapters.map((c: typeof book.chapters[number], i: number) => ({
+              "@type": "Chapter",
+              name: c.title,
+              position: i + 1,
+            })),
+          }),
+        }]
       : [],
   }),
 });
@@ -86,22 +80,17 @@ function BookReader() {
       const raw = localStorage.getItem(storageKey);
       if (raw) {
         const p = JSON.parse(raw);
-        if (typeof p.chapter === "number")
-          setChapter(Math.min(p.chapter, book.chapters.length - 1));
+        if (typeof p.chapter === "number") setChapter(Math.min(p.chapter, book.chapters.length - 1));
         if (typeof p.font === "number") setFontIdx(p.font);
       }
-    } catch (error) {
-      console.warn("Unable to restore reading position", error);
-    }
+    } catch {}
   }, [storageKey, book.chapters.length]);
 
   // Persist
   useEffect(() => {
     try {
       localStorage.setItem(storageKey, JSON.stringify({ chapter, font: fontIdx }));
-    } catch (error) {
-      console.warn("Unable to persist reading preferences", error);
-    }
+    } catch {}
   }, [chapter, fontIdx, storageKey]);
 
   // Scroll to top of reader on chapter change
@@ -186,9 +175,7 @@ function BookReader() {
   useEffect(() => {
     if (typeof document === "undefined") return;
     document.body.style.overflow = lightbox ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
+    return () => { document.body.style.overflow = ""; };
   }, [lightbox]);
 
   // Preload next chapter's first image to avoid flash on Next
@@ -210,17 +197,9 @@ function BookReader() {
       {/* Reading progress bar (sticky) */}
       <div className="sticky top-16 z-30 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 bg-background/85 backdrop-blur-md border-b border-border py-2">
         <div className="flex items-center gap-3">
-          <Link
-            to="/books"
-            className="font-mono-cyber text-xs text-accent hover:underline shrink-0"
-          >
-            ← Library
-          </Link>
+          <Link to="/books" className="font-mono-cyber text-xs text-accent hover:underline shrink-0">← Library</Link>
           <div className="flex-1 h-1.5 bg-surface rounded overflow-hidden">
-            <div
-              className="h-full bg-accent transition-all duration-500"
-              style={{ width: `${progress}%` }}
-            />
+            <div className="h-full bg-accent transition-all duration-500" style={{ width: `${progress}%` }} />
           </div>
           <span className="font-mono-cyber text-[10px] text-muted-foreground shrink-0">
             {chapter + 1}/{book.chapters.length}
@@ -241,23 +220,14 @@ function BookReader() {
         />
         <div>
           <div className="eyebrow mb-3">▸ {book.cat}</div>
-          <h1 className="font-display font-black text-3xl sm:text-4xl text-cyber-white leading-tight">
-            {book.title}
-          </h1>
+          <h1 className="font-display font-black text-3xl sm:text-4xl text-cyber-white leading-tight">{book.title}</h1>
           <p className="mt-2 text-muted-foreground font-mono-cyber text-sm">
             by {book.author} · {book.year} · {book.pages} pages · {book.chapters.length} chapters
           </p>
           <p className="mt-4 text-cyber-text">{book.desc}</p>
           <div className="mt-5 flex flex-wrap gap-2">
             <button
-              onClick={() =>
-                generateBookPdf({
-                  title: book.title,
-                  author: book.author,
-                  year: book.year,
-                  chapters: book.chapters,
-                })
-              }
+              onClick={() => generateBookPdf({ title: book.title, author: book.author, year: book.year, chapters: book.chapters })}
               className="btn-cyber !py-2 !px-4 !text-xs"
             >
               ⬇ Download PDF
@@ -271,14 +241,7 @@ function BookReader() {
               🔍 Find Online
             </a>
             <button
-              onClick={() => {
-                try {
-                  localStorage.removeItem(storageKey);
-                } catch (error) {
-                  console.warn("Unable to clear local reading progress", error);
-                }
-                setChapter(0);
-              }}
+              onClick={() => { try { localStorage.removeItem(storageKey); } catch {} setChapter(0); }}
               className="btn-ghost-cyber !py-2 !px-4 !text-xs"
             >
               ↺ Restart
@@ -288,10 +251,7 @@ function BookReader() {
       </header>
 
       {/* Table of Contents overview (collapsible, full chapter listing) */}
-      <section
-        className="mb-10 border border-border rounded card-cyber overflow-hidden"
-        aria-label="Table of contents"
-      >
+      <section className="mb-10 border border-border rounded card-cyber overflow-hidden" aria-label="Table of contents">
         <button
           onClick={() => setOverviewOpen((v) => !v)}
           className="w-full flex items-center justify-between px-5 py-4 bg-surface hover:bg-surface/70 transition"
@@ -307,21 +267,17 @@ function BookReader() {
         </button>
         {overviewOpen && (
           <ol className="divide-y divide-border/40">
-            {book.chapters.map((c: (typeof book.chapters)[number], i: number) => (
+            {book.chapters.map((c: typeof book.chapters[number], i: number) => (
               <li key={i}>
                 <button
                   onClick={() => setChapter(i)}
                   className={`group w-full text-left flex items-start gap-4 px-5 py-3.5 ${i === chapter ? "bg-accent/5" : "hover:bg-surface/40"}`}
                 >
-                  <span
-                    className={`font-mono-cyber text-xs shrink-0 w-8 ${i === chapter ? "text-accent" : "text-muted-foreground"}`}
-                  >
+                  <span className={`font-mono-cyber text-xs shrink-0 w-8 ${i === chapter ? "text-accent" : "text-muted-foreground"}`}>
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   <span className="flex-1">
-                    <span
-                      className={`block font-display text-sm font-semibold ${i === chapter ? "text-accent" : "text-cyber-white group-hover:text-accent"} transition`}
-                    >
+                    <span className={`block font-display text-sm font-semibold ${i === chapter ? "text-accent" : "text-cyber-white group-hover:text-accent"} transition`}>
                       {c.title}
                     </span>
                     <span className="block text-xs text-muted-foreground mt-0.5 line-clamp-2">
@@ -346,22 +302,18 @@ function BookReader() {
           onClick={() => setTocOpen((v) => !v)}
           className="w-full flex items-center justify-between border border-border rounded px-4 py-3 text-sm text-cyber-white bg-surface"
         >
-          <span className="font-mono-cyber text-xs text-muted-foreground">
-            CHAPTER {chapter + 1}
-          </span>
+          <span className="font-mono-cyber text-xs text-muted-foreground">CHAPTER {chapter + 1}</span>
           <span className="text-accent">{tocOpen ? "▲" : "▼"}</span>
         </button>
         {tocOpen && (
           <div className="mt-2 border border-border rounded bg-surface max-h-72 overflow-auto">
-            {book.chapters.map((c: (typeof book.chapters)[number], i: number) => (
+            {book.chapters.map((c: typeof book.chapters[number], i: number) => (
               <button
                 key={i}
                 onClick={() => setChapter(i)}
                 className={`block w-full text-left text-sm px-4 py-2.5 border-b border-border/40 ${i === chapter ? "text-accent bg-accent/5" : "text-muted-foreground hover:text-cyber-white"}`}
               >
-                <span className="font-mono-cyber text-[10px] mr-2">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
+                <span className="font-mono-cyber text-[10px] mr-2">{String(i + 1).padStart(2, "0")}</span>
                 {c.title}
               </button>
             ))}
@@ -372,15 +324,13 @@ function BookReader() {
       <div ref={readerRef} className="grid md:grid-cols-[220px_1fr] gap-8 scroll-mt-24">
         <nav className="hidden md:block md:sticky md:top-32 md:self-start space-y-1 max-h-[calc(100vh-10rem)] overflow-auto pr-2">
           <div className="eyebrow mb-2">Chapters</div>
-          {book.chapters.map((c: (typeof book.chapters)[number], i: number) => (
+          {book.chapters.map((c: typeof book.chapters[number], i: number) => (
             <button
               key={i}
               onClick={() => setChapter(i)}
               className={`block w-full text-left text-sm px-3 py-2 rounded border ${i === chapter ? "border-accent text-accent bg-accent/5" : "border-border text-muted-foreground hover:text-cyber-white hover:border-accent/40"}`}
             >
-              <span className="font-mono-cyber text-[10px] mr-2 opacity-60">
-                {String(i + 1).padStart(2, "0")}
-              </span>
+              <span className="font-mono-cyber text-[10px] mr-2 opacity-60">{String(i + 1).padStart(2, "0")}</span>
               {c.title}
             </button>
           ))}
@@ -412,20 +362,13 @@ function BookReader() {
             </div>
           </div>
 
-          <h2 className="font-display font-bold text-2xl sm:text-3xl text-cyber-white mb-6">
-            {ch.title}
-          </h2>
+          <h2 className="font-display font-bold text-2xl sm:text-3xl text-cyber-white mb-6">{ch.title}</h2>
 
           {ch.images && ch.images.length > 0 && (
             <figure className="mb-8 rounded overflow-hidden border border-border group">
               <button
                 type="button"
-                onClick={() =>
-                  openLightbox(
-                    ch.images![0],
-                    `FIG. ${chapter + 1}.1 — ${ch.title.replace(/^Chapter \d+:\s*/, "")}`,
-                  )
-                }
+                onClick={() => openLightbox(ch.images![0], `FIG. ${chapter + 1}.1 — ${ch.title.replace(/^Chapter \d+:\s*/, "")}`)}
                 className="block w-full relative cursor-zoom-in"
                 aria-label="Open figure in lightbox"
               >
@@ -535,9 +478,7 @@ function BookReader() {
             />
             <figcaption className="mt-3 text-center font-mono-cyber text-xs text-cyber-white">
               {lightbox.caption}
-              <span className="block mt-1 text-muted-foreground">
-                Press ESC or click outside to close
-              </span>
+              <span className="block mt-1 text-muted-foreground">Press ESC or click outside to close</span>
             </figcaption>
           </figure>
         </div>

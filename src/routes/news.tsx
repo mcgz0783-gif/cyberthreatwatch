@@ -8,16 +8,9 @@ export const Route = createFileRoute("/news")({
   head: () => ({
     meta: [
       { title: "Threat News — CyberSec Updates" },
-      {
-        name: "description",
-        content:
-          "The latest cybersecurity news: zero-days, breaches, ransomware, nation-state activity, and emerging threats.",
-      },
+      { name: "description", content: "The latest cybersecurity news: zero-days, breaches, ransomware, nation-state activity, and emerging threats." },
       { property: "og:title", content: "Threat News — CyberSec Updates" },
-      {
-        property: "og:description",
-        content: "Curated cybersecurity news and active threat reporting.",
-      },
+      { property: "og:description", content: "Curated cybersecurity news and active threat reporting." },
       { property: "og:url", content: "https://cyberthreatwatch.lovable.app/news" },
     ],
     links: [{ rel: "canonical", href: "https://cyberthreatwatch.lovable.app/news" }],
@@ -35,10 +28,11 @@ function NewsPage() {
       NEWS.filter((n) => {
         const inCat = cat === "All" || n.cat === cat;
         const inQ =
-          !q || (n.title + n.summary + n.tags.join(" ")).toLowerCase().includes(q.toLowerCase());
+          !q ||
+          (n.title + n.summary + n.tags.join(" ")).toLowerCase().includes(q.toLowerCase());
         return inCat && inQ;
       }),
-    [q, cat],
+    [q, cat]
   );
 
   return (

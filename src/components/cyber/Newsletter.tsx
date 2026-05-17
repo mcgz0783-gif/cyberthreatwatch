@@ -25,8 +25,8 @@ export function Newsletter() {
         <div className="text-5xl mb-4 animate-pulse-glow">📡</div>
         <h2 className="section-title mb-3">Stay in the Loop</h2>
         <p className="text-muted-foreground max-w-xl mx-auto mb-8">
-          Real-time threat intelligence, curated news, and deep-dive analysis delivered to your
-          inbox.
+          Real-time threat intelligence, curated news, and deep-dive analysis
+          delivered to your inbox.
         </p>
         {state === "ok" ? (
           <div className="font-mono-cyber text-cyber-green text-sm tracking-widest">{msg}</div>
@@ -37,15 +37,10 @@ export function Newsletter() {
               required
               placeholder="agent@domain.com"
               value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-                setState("idle");
-              }}
+              onChange={(e) => { setEmail(e.target.value); setState("idle"); }}
               className="input-cyber"
             />
-            <button type="submit" className="btn-cyber">
-              Subscribe
-            </button>
+            <button type="submit" className="btn-cyber">Subscribe</button>
           </form>
         )}
         {state === "error" && (

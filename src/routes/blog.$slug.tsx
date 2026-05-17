@@ -23,9 +23,7 @@ export const Route = createFileRoute("/blog/$slug")({
   notFoundComponent: () => (
     <div className="max-w-3xl mx-auto px-4 py-24 text-center">
       <h1 className="font-display text-3xl text-cyber-white mb-4">Article not found</h1>
-      <Link to="/blog" className="btn-cyber">
-        ← Back to blog
-      </Link>
+      <Link to="/blog" className="btn-cyber">← Back to blog</Link>
     </div>
   ),
   component: BlogPostPage,
@@ -36,20 +34,12 @@ function BlogPostPage() {
   return (
     <article>
       <div className="relative h-[40vh] min-h-[280px] overflow-hidden border-b border-border">
-        <img
-          src={post.cover}
-          alt={post.title}
-          className="absolute inset-0 w-full h-full object-cover"
-        />
+        <img src={post.cover} alt={post.title} className="absolute inset-0 w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/20" />
         <div className="absolute inset-0 grid-bg opacity-40" />
         <div className="relative max-w-4xl mx-auto h-full px-4 sm:px-6 lg:px-8 flex flex-col justify-end pb-10">
-          <div className="mb-3">
-            <Tag>{post.cat}</Tag>
-          </div>
-          <h1 className="font-display font-black text-3xl sm:text-5xl text-cyber-white leading-tight max-w-3xl">
-            {post.title}
-          </h1>
+          <div className="mb-3"><Tag>{post.cat}</Tag></div>
+          <h1 className="font-display font-black text-3xl sm:text-5xl text-cyber-white leading-tight max-w-3xl">{post.title}</h1>
           <p className="mt-3 font-mono-cyber text-xs text-muted-foreground">
             {post.author} · {post.date} · ⏱ {post.read}
           </p>
@@ -68,9 +58,7 @@ function BlogPostPage() {
         ))}
 
         <div className="mt-16 pt-8 border-t border-border flex flex-wrap justify-between items-center gap-4">
-          <Link to="/blog" className="btn-ghost-cyber !py-2 !px-4 !text-xs">
-            ← All posts
-          </Link>
+          <Link to="/blog" className="btn-ghost-cyber !py-2 !px-4 !text-xs">← All posts</Link>
           <a
             href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}`}
             target="_blank"

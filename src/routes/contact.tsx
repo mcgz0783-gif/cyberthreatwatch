@@ -6,15 +6,9 @@ export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
       { title: "Contact — CyberSec Updates" },
-      {
-        name: "description",
-        content: "Submit a tip, request research, or get in touch with the CyberSec Updates team.",
-      },
+      { name: "description", content: "Submit a tip, request research, or get in touch with the CyberSec Updates team." },
       { property: "og:title", content: "Contact — CyberSec Updates" },
-      {
-        property: "og:description",
-        content: "Reach the CyberSec Updates team — tips, research, partnerships.",
-      },
+      { property: "og:description", content: "Reach the CyberSec Updates team — tips, research, partnerships." },
       { property: "og:url", content: "https://cyberthreatwatch.lovable.app/contact" },
     ],
     links: [{ rel: "canonical", href: "https://cyberthreatwatch.lovable.app/contact" }],
@@ -26,9 +20,8 @@ function ContactPage() {
   const [sent, setSent] = useState(false);
   const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
 
-  const update =
-    (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-      setForm((f) => ({ ...f, [k]: e.target.value }));
+  const update = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+    setForm((f) => ({ ...f, [k]: e.target.value }));
 
   return (
     <>
@@ -79,39 +72,20 @@ function ContactPage() {
                   <label className="block font-mono-cyber text-[11px] tracking-widest text-muted-foreground uppercase mb-2">
                     Name
                   </label>
-                  <input
-                    required
-                    value={form.name}
-                    onChange={update("name")}
-                    className="input-cyber"
-                    placeholder="Agent name"
-                  />
+                  <input required value={form.name} onChange={update("name")} className="input-cyber" placeholder="Agent name" />
                 </div>
                 <div>
                   <label className="block font-mono-cyber text-[11px] tracking-widest text-muted-foreground uppercase mb-2">
                     Email
                   </label>
-                  <input
-                    required
-                    type="email"
-                    value={form.email}
-                    onChange={update("email")}
-                    className="input-cyber"
-                    placeholder="you@domain.com"
-                  />
+                  <input required type="email" value={form.email} onChange={update("email")} className="input-cyber" placeholder="you@domain.com" />
                 </div>
               </div>
               <div>
                 <label className="block font-mono-cyber text-[11px] tracking-widest text-muted-foreground uppercase mb-2">
                   Subject
                 </label>
-                <input
-                  required
-                  value={form.subject}
-                  onChange={update("subject")}
-                  className="input-cyber"
-                  placeholder="Tip / research / press"
-                />
+                <input required value={form.subject} onChange={update("subject")} className="input-cyber" placeholder="Tip / research / press" />
               </div>
               <div>
                 <label className="block font-mono-cyber text-[11px] tracking-widest text-muted-foreground uppercase mb-2">

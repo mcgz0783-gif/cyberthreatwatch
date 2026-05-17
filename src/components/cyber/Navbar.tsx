@@ -37,7 +37,12 @@ export function Navbar() {
 
         <nav className="hidden md:flex items-center gap-8">
           {NAV.map((n) => (
-            <Link key={n.to} to={n.to} activeOptions={{ exact: n.to === "/" }} className="nav-link">
+            <Link
+              key={n.to}
+              to={n.to}
+              activeOptions={{ exact: n.to === "/" }}
+              className="nav-link"
+            >
               {n.label}
             </Link>
           ))}

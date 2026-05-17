@@ -8,11 +8,7 @@ export const Route = createFileRoute("/books")({
   head: () => ({
     meta: [
       { title: "Books — CyberSec Updates" },
-      {
-        name: "description",
-        content:
-          "Curated cybersecurity books across offensive security, blue team, threat intel, malware analysis, and architecture.",
-      },
+      { name: "description", content: "Curated cybersecurity books across offensive security, blue team, threat intel, malware analysis, and architecture." },
       { property: "og:title", content: "Books — CyberSec Updates" },
       { property: "og:description", content: "Curated cybersecurity reading list." },
       { property: "og:url", content: "https://cyberthreatwatch.lovable.app/books" },
@@ -27,9 +23,9 @@ function BooksPage() {
   const filtered = useMemo(
     () =>
       BOOKS.filter(
-        (b) => !q || (b.title + b.author + b.cat + b.desc).toLowerCase().includes(q.toLowerCase()),
+        (b) => !q || (b.title + b.author + b.cat + b.desc).toLowerCase().includes(q.toLowerCase())
       ),
-    [q],
+    [q]
   );
 
   return (
