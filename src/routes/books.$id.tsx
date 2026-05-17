@@ -1,6 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { BOOKS } from "@/lib/cyber-data";
 import { generateBookPdf } from "@/lib/pdf";
+import { recordChapterDwell, recordChapterView } from "@/lib/analytics";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 const BASE = "https://cyberhawk-ug.store";
