@@ -11,9 +11,9 @@ export const Route = createFileRoute("/blog")({
       { name: "description", content: "Practitioner blog posts on Zero Trust, K8s security, SOC operations, bug bounty, threat intel, and more." },
       { property: "og:title", content: "Blog — CyberSec Updates" },
       { property: "og:description", content: "Practitioner blog posts from cybersecurity professionals." },
-      { property: "og:url", content: "https://cyberthreatwatch.lovable.app/blog" },
+      { property: "og:url", content: "https://cyberhawk-ug.store/blog" },
     ],
-    links: [{ rel: "canonical", href: "https://cyberthreatwatch.lovable.app/blog" }],
+    links: [{ rel: "canonical", href: "https://cyberhawk-ug.store/blog" }],
   }),
   component: BlogPage,
 });

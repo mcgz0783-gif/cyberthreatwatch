@@ -1,9 +1,10 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { BOOKS } from "@/lib/cyber-data";
 import { generateBookPdf } from "@/lib/pdf";
+import { recordChapterDwell, recordChapterView } from "@/lib/analytics";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-const BASE = "https://cyberthreatwatch.lovable.app";
+const BASE = "https://cyberhawk-ug.store";
 
 export const Route = createFileRoute("/books/$id")({
   component: BookReader,
@@ -72,6 +73,8 @@ function BookReader() {
   const [tocOpen, setTocOpen] = useState(false);
   const [overviewOpen, setOverviewOpen] = useState(false);
   const [lightbox, setLightbox] = useState<Lightbox | null>(null);
+  const lightboxCloseRef = useRef<HTMLButtonElement | null>(null);
+  const lastFocusedRef = useRef<HTMLElement | null>(null);
   const readerRef = useRef<HTMLDivElement | null>(null);
 
   // Restore last position
@@ -98,6 +101,24 @@ function BookReader() {
     readerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     setTocOpen(false);
   }, [chapter]);
+
+  // Reading analytics — record a view + dwell time per chapter
+  useEffect(() => {
+    recordChapterView(String(book.id), book.title, chapter);
+    const start = Date.now();
+    const flush = (completed?: boolean) => {
+      const secs = (Date.now() - start) / 1000;
+      recordChapterDwell(String(book.id), book.title, chapter, secs, completed);
+    };
+    const onHide = () => { if (document.visibilityState === "hidden") flush(); };
+    document.addEventListener("visibilitychange", onHide);
+    window.addEventListener("pagehide", () => flush());
+    return () => {
+      document.removeEventListener("visibilitychange", onHide);
+      const isLast = chapter === book.chapters.length - 1;
+      flush(isLast);
+    };
+  }, [chapter, book.id, book.title, book.chapters.length]);
 
   const ch = book.chapters[chapter];
   const progress = ((chapter + 1) / book.chapters.length) * 100;
@@ -171,10 +192,18 @@ function BookReader() {
     return () => window.removeEventListener("keydown", onKey);
   }, [goPrev, goNext, lightbox]);
 
-  // Lock body scroll while lightbox is open
+  // Lock body scroll + manage focus while lightbox is open (a11y)
   useEffect(() => {
     if (typeof document === "undefined") return;
-    document.body.style.overflow = lightbox ? "hidden" : "";
+    if (lightbox) {
+      lastFocusedRef.current = document.activeElement as HTMLElement | null;
+      document.body.style.overflow = "hidden";
+      // Defer focus until modal mounts
+      requestAnimationFrame(() => lightboxCloseRef.current?.focus());
+    } else {
+      document.body.style.overflow = "";
+      lastFocusedRef.current?.focus?.();
+    }
     return () => { document.body.style.overflow = ""; };
   }, [lightbox]);
 
@@ -456,13 +485,22 @@ function BookReader() {
           className="fixed inset-0 z-[100] bg-background/95 backdrop-blur-sm flex items-center justify-center p-4 sm:p-8 animate-in fade-in"
           role="dialog"
           aria-modal="true"
-          aria-label={lightbox.caption}
+          aria-labelledby="lightbox-caption"
+          aria-describedby="lightbox-hint"
           onClick={() => setLightbox(null)}
+          onKeyDown={(e) => {
+            // Simple focus trap — only one focusable (close button), so trap Tab on it
+            if (e.key === "Tab") {
+              e.preventDefault();
+              lightboxCloseRef.current?.focus();
+            }
+          }}
         >
           <button
-            onClick={() => setLightbox(null)}
-            className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full border border-border bg-surface/80 backdrop-blur text-cyber-white text-xl flex items-center justify-center hover:bg-accent hover:text-background transition"
-            aria-label="Close lightbox"
+            ref={lightboxCloseRef}
+            onClick={(e) => { e.stopPropagation(); setLightbox(null); }}
+            className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full border border-border bg-surface/80 backdrop-blur text-cyber-white text-xl flex items-center justify-center hover:bg-accent hover:text-background focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none transition"
+            aria-label="Close image viewer"
           >
             ✕
           </button>
@@ -476,9 +514,9 @@ function BookReader() {
               className="w-full h-auto max-h-[80vh] object-contain rounded border border-border bg-black"
               decoding="async"
             />
-            <figcaption className="mt-3 text-center font-mono-cyber text-xs text-cyber-white">
+            <figcaption id="lightbox-caption" className="mt-3 text-center font-mono-cyber text-xs text-cyber-white">
               {lightbox.caption}
-              <span className="block mt-1 text-muted-foreground">Press ESC or click outside to close</span>
+              <span id="lightbox-hint" className="block mt-1 text-muted-foreground">Press ESC or click outside to close</span>
             </figcaption>
           </figure>
         </div>

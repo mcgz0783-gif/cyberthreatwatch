@@ -20,9 +20,9 @@ export const Route = createFileRoute("/faq")({
       { name: "description", content: "Frequently asked questions about CyberSec Updates: how to read books, download PDFs, use the toolkit, and manage your subscription." },
       { property: "og:title", content: "FAQ — CyberSec Updates" },
       { property: "og:description", content: "Common questions about the publication, library, and toolkit." },
-      { property: "og:url", content: "https://cyberthreatwatch.lovable.app/faq" },
+      { property: "og:url", content: "https://cyberhawk-ug.store/faq" },
     ],
-    links: [{ rel: "canonical", href: "https://cyberthreatwatch.lovable.app/faq" }],
+    links: [{ rel: "canonical", href: "https://cyberhawk-ug.store/faq" }],
     scripts: [{
       type: "application/ld+json",
       children: JSON.stringify({

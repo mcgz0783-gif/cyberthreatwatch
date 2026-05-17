@@ -11,9 +11,9 @@ export const Route = createFileRoute("/news")({
       { name: "description", content: "The latest cybersecurity news: zero-days, breaches, ransomware, nation-state activity, and emerging threats." },
       { property: "og:title", content: "Threat News — CyberSec Updates" },
       { property: "og:description", content: "Curated cybersecurity news and active threat reporting." },
-      { property: "og:url", content: "https://cyberthreatwatch.lovable.app/news" },
+      { property: "og:url", content: "https://cyberhawk-ug.store/news" },
     ],
-    links: [{ rel: "canonical", href: "https://cyberthreatwatch.lovable.app/news" }],
+    links: [{ rel: "canonical", href: "https://cyberhawk-ug.store/news" }],
   }),
   component: NewsPage,
 });

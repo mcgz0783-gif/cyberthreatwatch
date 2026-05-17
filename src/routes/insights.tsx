@@ -10,9 +10,9 @@ export const Route = createFileRoute("/insights")({
       { name: "description", content: "Long-form cybersecurity research: ransomware reports, AI threat analysis, infrastructure briefs, and industry trends." },
       { property: "og:title", content: "Insights — CyberSec Updates" },
       { property: "og:description", content: "Deep-dive cybersecurity research and analysis." },
-      { property: "og:url", content: "https://cyberthreatwatch.lovable.app/insights" },
+      { property: "og:url", content: "https://cyberhawk-ug.store/insights" },
     ],
-    links: [{ rel: "canonical", href: "https://cyberthreatwatch.lovable.app/insights" }],
+    links: [{ rel: "canonical", href: "https://cyberhawk-ug.store/insights" }],
   }),
   component: InsightsPage,
 });

@@ -1,7 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { TOOLS, findTool } from "@/lib/cyber-data";
 
-const BASE = "https://cyberthreatwatch.lovable.app";
+const BASE = "https://cyberhawk-ug.store";
 
 export const Route = createFileRoute("/tools/$slug")({
   loader: ({ params }) => {

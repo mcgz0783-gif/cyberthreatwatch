@@ -8,9 +8,9 @@ export const Route = createFileRoute("/privacy")({
       { name: "description", content: "How CyberSec Updates handles your data, cookies, and newsletter subscriptions." },
       { property: "og:title", content: "Privacy Policy — CyberSec Updates" },
       { property: "og:description", content: "How CyberSec Updates handles your data and protects your privacy." },
-      { property: "og:url", content: "https://cyberthreatwatch.lovable.app/privacy" },
+      { property: "og:url", content: "https://cyberhawk-ug.store/privacy" },
     ],
-    links: [{ rel: "canonical", href: "https://cyberthreatwatch.lovable.app/privacy" }],
+    links: [{ rel: "canonical", href: "https://cyberhawk-ug.store/privacy" }],
   }),
   component: PrivacyPage,
 });
