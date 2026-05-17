@@ -514,9 +514,9 @@ function BookReader() {
               className="w-full h-auto max-h-[80vh] object-contain rounded border border-border bg-black"
               decoding="async"
             />
-            <figcaption className="mt-3 text-center font-mono-cyber text-xs text-cyber-white">
+            <figcaption id="lightbox-caption" className="mt-3 text-center font-mono-cyber text-xs text-cyber-white">
               {lightbox.caption}
-              <span className="block mt-1 text-muted-foreground">Press ESC or click outside to close</span>
+              <span id="lightbox-hint" className="block mt-1 text-muted-foreground">Press ESC or click outside to close</span>
             </figcaption>
           </figure>
         </div>
