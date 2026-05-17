@@ -3,7 +3,7 @@ import { BOOKS } from "@/lib/cyber-data";
 import { generateBookPdf } from "@/lib/pdf";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-const BASE = "https://cyberthreatwatch.lovable.app";
+const BASE = "https://cyberhawk-ug.store";
 
 export const Route = createFileRoute("/books/$id")({
   component: BookReader,

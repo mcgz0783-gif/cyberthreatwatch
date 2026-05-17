@@ -9,9 +9,9 @@ export const Route = createFileRoute("/about")({
       { name: "description", content: "CyberSec Updates is an independent cybersecurity intelligence platform serving defenders, builders, and researchers worldwide." },
       { property: "og:title", content: "About — CyberSec Updates" },
       { property: "og:description", content: "Who we are and why we built CyberSec Updates." },
-      { property: "og:url", content: "https://cyberthreatwatch.lovable.app/about" },
+      { property: "og:url", content: "https://cyberhawk-ug.store/about" },
     ],
-    links: [{ rel: "canonical", href: "https://cyberthreatwatch.lovable.app/about" }],
+    links: [{ rel: "canonical", href: "https://cyberhawk-ug.store/about" }],
   }),
   component: AboutPage,
 });

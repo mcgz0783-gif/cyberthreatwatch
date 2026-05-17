@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://cyberthreatwatch.lovable.app/sitemap.xml
+Sitemap: https://cyberhawk-ug.store/sitemap.xml

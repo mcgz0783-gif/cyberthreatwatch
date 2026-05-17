@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { BLOGS, INSIGHTS, BOOKS, TOOLS } from "@/lib/cyber-data";
 
-const BASE_URL = "https://cyberthreatwatch.lovable.app";
+const BASE_URL = "https://cyberhawk-ug.store";
 
 interface SitemapEntry { path: string; changefreq?: string; priority?: string }
 

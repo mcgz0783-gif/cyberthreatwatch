@@ -11,9 +11,9 @@ export const Route = createFileRoute("/books")({
       { name: "description", content: "Curated cybersecurity books across offensive security, blue team, threat intel, malware analysis, and architecture." },
       { property: "og:title", content: "Books — CyberSec Updates" },
       { property: "og:description", content: "Curated cybersecurity reading list." },
-      { property: "og:url", content: "https://cyberthreatwatch.lovable.app/books" },
+      { property: "og:url", content: "https://cyberhawk-ug.store/books" },
     ],
-    links: [{ rel: "canonical", href: "https://cyberthreatwatch.lovable.app/books" }],
+    links: [{ rel: "canonical", href: "https://cyberhawk-ug.store/books" }],
   }),
   component: BooksPage,
 });

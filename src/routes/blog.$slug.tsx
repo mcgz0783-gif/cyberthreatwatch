@@ -16,9 +16,9 @@ export const Route = createFileRoute("/blog/$slug")({
       { property: "og:description", content: loaderData?.post.summary },
       { property: "og:image", content: loaderData?.post.cover },
       { property: "og:type", content: "article" },
-      { property: "og:url", content: `https://cyberthreatwatch.lovable.app/blog/${params.slug}` },
+      { property: "og:url", content: `https://cyberhawk-ug.store/blog/${params.slug}` },
     ],
-    links: [{ rel: "canonical", href: `https://cyberthreatwatch.lovable.app/blog/${params.slug}` }],
+    links: [{ rel: "canonical", href: `https://cyberhawk-ug.store/blog/${params.slug}` }],
   }),
   notFoundComponent: () => (
     <div className="max-w-3xl mx-auto px-4 py-24 text-center">

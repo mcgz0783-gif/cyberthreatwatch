@@ -9,9 +9,9 @@ export const Route = createFileRoute("/contact")({
       { name: "description", content: "Submit a tip, request research, or get in touch with the CyberSec Updates team." },
       { property: "og:title", content: "Contact — CyberSec Updates" },
       { property: "og:description", content: "Reach the CyberSec Updates team — tips, research, partnerships." },
-      { property: "og:url", content: "https://cyberthreatwatch.lovable.app/contact" },
+      { property: "og:url", content: "https://cyberhawk-ug.store/contact" },
     ],
-    links: [{ rel: "canonical", href: "https://cyberthreatwatch.lovable.app/contact" }],
+    links: [{ rel: "canonical", href: "https://cyberhawk-ug.store/contact" }],
   }),
   component: ContactPage,
 });

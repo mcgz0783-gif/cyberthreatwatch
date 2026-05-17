@@ -3,7 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { TOOLS } from "@/lib/cyber-data";
 import { PageHero } from "@/components/cyber/PageHero";
 
-const BASE = "https://cyberthreatwatch.lovable.app";
+const BASE = "https://cyberhawk-ug.store";
 
 export const Route = createFileRoute("/tools")({
   head: () => ({
