@@ -73,6 +73,8 @@ function BookReader() {
   const [tocOpen, setTocOpen] = useState(false);
   const [overviewOpen, setOverviewOpen] = useState(false);
   const [lightbox, setLightbox] = useState<Lightbox | null>(null);
+  const lightboxCloseRef = useRef<HTMLButtonElement | null>(null);
+  const lastFocusedRef = useRef<HTMLElement | null>(null);
   const readerRef = useRef<HTMLDivElement | null>(null);
 
   // Restore last position
